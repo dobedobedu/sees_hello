@@ -1,0 +1,114 @@
+{
+  "stories": [
+    {
+      "id": "current_tennis_star",
+      "firstName": "Marcus",
+      "photoUrl": "/images/students/marcus.jpg",
+      "interests": ["athletics", "tennis", "competition", "leadership"],
+      "storyTldr": "Following Jim Courier's path - ranked #1 in Florida juniors, committed to Duke tennis",
+      "achievement": "State tennis champion, 4.0 GPA, Duke University commit",
+      "parentQuote": "The same coaches who developed Jim Courier are mentoring our son",
+      "studentQuote": "Knowing Jim Courier walked these same courts motivates me every day",
+      "gradeLevel": "high"
+    },
+    {
+      "id": "future_performer",
+      "firstName": "Sarah",
+      "photoUrl": "/images/students/sarah.jpg",
+      "interests": ["arts", "theater", "music", "performance"],
+      "storyTldr": "Following Naarai Jacobs' footsteps - lead in every production, accepted to Juilliard pre-college",
+      "achievement": "Lead in 12 productions, Juilliard pre-college program",
+      "parentQuote": "The same stage where Naarai Jacobs started is launching our daughter's career",
+      "studentQuote": "Our drama teacher worked with Naarai - now she's mentoring me",
+      "gradeLevel": "high"
+    },
+    {
+      "id": "tech_innovator",
+      "firstName": "David",
+      "photoUrl": "/images/students/david.jpg",
+      "interests": ["technology", "coding", "entrepreneurship", "innovation"],
+      "storyTldr": "Built apps in the same computer lab where Brandon Silverman started CrowdTangle",
+      "achievement": "Created school safety app, internship at Microsoft",
+      "parentQuote": "SSES alumni like Ryan Roslansky (LinkedIn CEO) inspire our son daily",
+      "studentQuote": "Brandon Silverman started coding here - now he's my mentor",
+      "gradeLevel": "high"
+    },
+    {
+      "id": "future_scientist",
+      "firstName": "Emma",
+      "photoUrl": "/images/students/emma.jpg",
+      "interests": ["science", "chemistry", "space", "research"],
+      "storyTldr": "Inspired by alumna Janelle Coutts at NASA - won national science fair, MIT-bound",
+      "achievement": "Intel Science Fair finalist, researching with USF professors",
+      "parentQuote": "Knowing SSES sent someone to NASA makes anything seem possible",
+      "studentQuote": "Janelle Coutts came back to speak - she showed me the path to NASA",
+      "gradeLevel": "high"
+    },
+    {
+      "id": "young_athlete",
+      "firstName": "Jake",
+      "photoUrl": "/images/students/jake.jpg",
+      "interests": ["athletics", "football", "leadership", "teamwork"],
+      "storyTldr": "Training where Sydney Brown started - now freshman QB breaking records",
+      "achievement": "Led middle school to championship, high school varsity starter as freshman",
+      "parentQuote": "Sydney Brown's NFL journey started here - our son sees that path",
+      "studentQuote": "Coach tells us Sydney Brown stories - it makes us believe",
+      "gradeLevel": "high"
+    },
+    {
+      "id": "future_wallstreet",
+      "firstName": "Alexandra",
+      "photoUrl": "/images/students/alexandra.jpg",
+      "interests": ["mathematics", "business", "finance", "leadership"],
+      "storyTldr": "Math team captain inspired by Brittany Skoda's path to Morgan Stanley",
+      "achievement": "Founded investment club, internship at Raymond James",
+      "parentQuote": "Brittany Skoda proves SSES girls can run Wall Street",
+      "studentQuote": "Ms. Skoda video-called our class from Morgan Stanley - I knew that's my future",
+      "gradeLevel": "high"
+    },
+    {
+      "id": "future_doctor",
+      "firstName": "Maria",
+      "photoUrl": "/images/students/maria.jpg",
+      "interests": ["science", "medicine", "service", "biology"],
+      "storyTldr": "Shadowing Dr. Lauren Carcas '97 at Miami Cancer Institute this summer",
+      "achievement": "Founded medical club, accepted to Johns Hopkins pre-med program",
+      "parentQuote": "Dr. Carcas mentors SSES students - that connection is priceless",
+      "studentQuote": "Dr. Carcas showed me that SSES students become doctors who change lives",
+      "gradeLevel": "high"
+    },
+    {
+      "id": "young_journalist",
+      "firstName": "Oliver",
+      "photoUrl": "/images/students/oliver.jpg",
+      "interests": ["writing", "media", "communication", "journalism"],
+      "storyTldr": "School newspaper editor following Elizabeth Djinis '12 to journalism career",
+      "achievement": "Published in Tampa Bay Times student section, Columbia Journalism summer program",
+      "parentQuote": "Elizabeth Djinis writes for Tampa Bay Times - she started here too",
+      "studentQuote": "Ms. Djinis guest-edited our paper - she showed me journalism matters",
+      "gradeLevel": "high"
+    },
+    {
+      "id": "elementary_explorer",
+      "firstName": "Sophia",
+      "photoUrl": "/images/students/sophia.jpg",
+      "interests": ["nature", "science", "exploration", "creativity"],
+      "storyTldr": "Third grader who loves exploring became youngest published nature photographer",
+      "achievement": "Photography in National Geographic Kids, created school nature trail guide",
+      "parentQuote": "SSES turns curiosity into real accomplishment, even in elementary school",
+      "studentQuote": "My teacher said my photos were special - now they're in a magazine!",
+      "gradeLevel": "elementary"
+    },
+    {
+      "id": "middle_school_leader",
+      "firstName": "Aiden",
+      "photoUrl": "/images/students/aiden.jpg",
+      "interests": ["leadership", "service", "government", "debate"],
+      "storyTldr": "Student council president inspired by Jason Kaplan '91, now at FBI",
+      "achievement": "Led school's first Model UN conference, started civic engagement club",
+      "parentQuote": "Jason Kaplan FBI story shows SSES students become leaders who serve",
+      "studentQuote": "Agent Kaplan spoke at assembly - he said it all started in student government here",
+      "gradeLevel": "middle"
+    }
+  ]
+}

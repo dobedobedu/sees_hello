@@ -1,0 +1,201 @@
+{
+  "faculty": [
+    {
+      "id": "dr_janet_pullen",
+      "firstName": "Dr. Janet Pullen",
+      "title": "Head of School",
+      "photoUrl": "/images/faculty/pullen.jpg",
+      "specializesIn": ["leadership", "education", "whole_child", "innovation"],
+      "whyStudentsLoveThem": "Creates a culture where every student feels known and valued",
+      "department": "Administration",
+      "yearsAtSSES": 8,
+      "education": "Ed.D. Educational Leadership"
+    },
+    {
+      "id": "dr_dan_davies",
+      "firstName": "Dr. Dan Davies",
+      "title": "Upper School Director",
+      "photoUrl": "/images/faculty/davies.jpg",
+      "specializesIn": ["college_prep", "academic_excellence", "student_leadership"],
+      "whyStudentsLoveThem": "Knows every student by name and helps them reach their potential",
+      "department": "Upper School",
+      "yearsAtSSES": 5,
+      "education": "Ph.D. Educational Psychology"
+    },
+    {
+      "id": "kerri_mckenna",
+      "firstName": "Kerri McKenna",
+      "title": "Middle School Director",
+      "photoUrl": "/images/faculty/mckenna.jpg",
+      "specializesIn": ["adolescent_development", "social_emotional", "leadership"],
+      "whyStudentsLoveThem": "Makes middle school a time of growth, not just survival",
+      "department": "Middle School",
+      "yearsAtSSES": 12
+    },
+    {
+      "id": "julie_ferguson",
+      "firstName": "Julie Ferguson",
+      "title": "Lower School Director",
+      "photoUrl": "/images/faculty/ferguson.jpg",
+      "specializesIn": ["early_childhood", "literacy", "creative_learning"],
+      "whyStudentsLoveThem": "Nurtures young learners with warmth and high expectations",
+      "department": "Lower School",
+      "yearsAtSSES": 15
+    },
+    {
+      "id": "coach_turner",
+      "firstName": "Coach Turner",
+      "title": "Athletic Director & Tennis Coach",
+      "photoUrl": "/images/faculty/turner.jpg",
+      "specializesIn": ["tennis", "athletics", "character_building", "competition"],
+      "whyStudentsLoveThem": "Coached champions from Jim Courier to today's stars",
+      "department": "Athletics",
+      "yearsAtSSES": 25,
+      "notableAlumni": ["Jim Courier '87", "David Wheaton '87", "Martin Blackman '87"]
+    },
+    {
+      "id": "mrs_williams",
+      "firstName": "Mrs. Williams",
+      "title": "AP Science & Research Coordinator",
+      "photoUrl": "/images/faculty/williams.jpg",
+      "specializesIn": ["science", "research", "STEM", "college_science"],
+      "whyStudentsLoveThem": "Turns curious questions into published research projects",
+      "department": "Science",
+      "yearsAtSSES": 18,
+      "notableAlumni": ["Janelle Coutts '04 (NASA)", "Dr. Denitza Blagev '95"]
+    },
+    {
+      "id": "mr_rodriguez",
+      "firstName": "Mr. Rodriguez",
+      "title": "Performing Arts Director",
+      "photoUrl": "/images/faculty/rodriguez.jpg",
+      "specializesIn": ["theater", "music", "performance", "creativity"],
+      "whyStudentsLoveThem": "Discovers hidden talents and builds confident performers",
+      "department": "Arts",
+      "yearsAtSSES": 20,
+      "notableAlumni": ["Naarai Jacobs '10 (Coachella performer)"]
+    },
+    {
+      "id": "dr_thompson",
+      "firstName": "Dr. Thompson",
+      "title": "Mathematics Department Chair",
+      "photoUrl": "/images/faculty/thompson.jpg",
+      "specializesIn": ["mathematics", "calculus", "problem_solving", "analytical_thinking"],
+      "whyStudentsLoveThem": "Makes complex math accessible to every learning style",
+      "department": "Mathematics",
+      "yearsAtSSES": 16,
+      "education": "Ph.D. Mathematics Education"
+    },
+    {
+      "id": "mrs_chen",
+      "firstName": "Mrs. Chen",
+      "title": "Technology & Innovation Director",
+      "photoUrl": "/images/faculty/chen.jpg",
+      "specializesIn": ["technology", "coding", "robotics", "entrepreneurship"],
+      "whyStudentsLoveThem": "Encourages students to build, fail, and innovate",
+      "department": "Technology",
+      "yearsAtSSES": 10,
+      "notableAlumni": ["Ryan Roslansky '96 (LinkedIn CEO)", "Brandon Silverman '98 (CrowdTangle)"]
+    },
+    {
+      "id": "ms_garcia",
+      "firstName": "Ms. Garcia",
+      "title": "College Counseling Director",
+      "photoUrl": "/images/faculty/garcia.jpg",
+      "specializesIn": ["college_admissions", "scholarships", "career_planning", "mentorship"],
+      "whyStudentsLoveThem": "100% college acceptance rate speaks for itself",
+      "department": "College Counseling",
+      "yearsAtSSES": 14,
+      "achievements": ["$2.3M in scholarships annually", "Ivy League placements every year"]
+    },
+    {
+      "id": "coach_mitchell",
+      "firstName": "Coach Mitchell",
+      "title": "Football Coach & PE Chair",
+      "photoUrl": "/images/faculty/mitchell.jpg",
+      "specializesIn": ["football", "fitness", "teamwork", "leadership"],
+      "whyStudentsLoveThem": "Builds champions on the field and leaders in life",
+      "department": "Athletics",
+      "yearsAtSSES": 12,
+      "notableAlumni": ["Sydney Brown '18 (NFL)", "Brad Rusin '05 (Pro Soccer)"]
+    },
+    {
+      "id": "dr_patel",
+      "firstName": "Dr. Patel",
+      "title": "Learning Specialist & Support Services",
+      "photoUrl": "/images/faculty/patel.jpg",
+      "specializesIn": ["learning_differences", "support", "individualized_education", "neurodiversity"],
+      "whyStudentsLoveThem": "Ensures every student has the tools to succeed",
+      "department": "Student Support",
+      "yearsAtSSES": 8,
+      "education": "Ed.D. Special Education"
+    },
+    {
+      "id": "mr_jackson",
+      "firstName": "Mr. Jackson",
+      "title": "English Department Chair & Journalism Advisor",
+      "photoUrl": "/images/faculty/jackson.jpg",
+      "specializesIn": ["writing", "journalism", "literature", "communication"],
+      "whyStudentsLoveThem": "Transforms students into published writers and critical thinkers",
+      "department": "English",
+      "yearsAtSSES": 15,
+      "notableAlumni": ["Elizabeth Djinis '12 (Tampa Bay Times)", "Aaron Jacobson '08 (Radio Host)"]
+    },
+    {
+      "id": "mrs_anderson",
+      "firstName": "Mrs. Anderson",
+      "title": "Business & Economics Teacher",
+      "photoUrl": "/images/faculty/anderson.jpg",
+      "specializesIn": ["business", "finance", "economics", "entrepreneurship"],
+      "whyStudentsLoveThem": "Connects classroom economics to real-world success",
+      "department": "Business",
+      "yearsAtSSES": 11,
+      "notableAlumni": ["Brittany Skoda '05 (Morgan Stanley MD)", "Sean Ward '96 (Dyal Capital)"]
+    },
+    {
+      "id": "ms_taylor",
+      "firstName": "Ms. Taylor",
+      "title": "World Languages Department Chair",
+      "photoUrl": "/images/faculty/taylor.jpg",
+      "specializesIn": ["languages", "spanish", "culture", "global_studies"],
+      "whyStudentsLoveThem": "Opens doors to global opportunities through language",
+      "department": "Languages",
+      "yearsAtSSES": 17,
+      "achievements": ["Immersion program from PreK", "Study abroad partnerships"]
+    }
+  ],
+  "departments": {
+    "upper_school": {
+      "grades": "9-12",
+      "director": "Dr. Dan Davies",
+      "focus": "College preparation, leadership development, advanced academics"
+    },
+    "middle_school": {
+      "grades": "6-8",
+      "director": "Kerri McKenna",
+      "focus": "Adolescent development, exploration, building confidence"
+    },
+    "lower_school": {
+      "grades": "PreK-5",
+      "director": "Julie Ferguson",
+      "focus": "Foundation skills, creativity, love of learning"
+    },
+    "athletics": {
+      "sports": 23,
+      "director": "Coach Turner",
+      "championships": "Multiple state championships",
+      "notable": "No-cut policy in Middle School"
+    },
+    "arts": {
+      "programs": ["Visual Arts", "Theater", "Music", "Dance"],
+      "director": "Mr. Rodriguez",
+      "facilities": "600-seat performing arts center"
+    },
+    "college_counseling": {
+      "director": "Ms. Garcia",
+      "starts": "9th grade",
+      "acceptance_rate": "100% to 4-year colleges",
+      "scholarships": "$2.3M annually"
+    }
+  }
+}

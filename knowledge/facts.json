@@ -1,0 +1,144 @@
+{
+  "facts": [
+    {
+      "id": "college_acceptance",
+      "gradeLevel": "high",
+      "fact": "100% college acceptance rate with $2.3M in scholarships earned",
+      "context": "Class of 2024 results",
+      "category": "academic"
+    },
+    {
+      "id": "class_size_elementary",
+      "gradeLevel": "elementary",
+      "fact": "Average class size of 14 students with two teachers per classroom",
+      "context": "Lower School maintains optimal learning ratios",
+      "category": "environment"
+    },
+    {
+      "id": "class_size_middle",
+      "gradeLevel": "middle",
+      "fact": "Student-teacher ratio of 8:1 in Middle School",
+      "context": "Personalized attention during crucial developmental years",
+      "category": "environment"
+    },
+    {
+      "id": "class_size_high",
+      "gradeLevel": "high",
+      "fact": "Average class size of 12 in Upper School with 30+ AP offerings",
+      "context": "College-level preparation with personal attention",
+      "category": "environment"
+    },
+    {
+      "id": "arts_participation",
+      "gradeLevel": "all",
+      "fact": "85% of students participate in visual or performing arts",
+      "context": "Comprehensive arts program from PreK through 12th grade",
+      "category": "arts"
+    },
+    {
+      "id": "athletics_options",
+      "gradeLevel": "all",
+      "fact": "23 varsity sports teams with no-cut policy for Middle School",
+      "context": "Every student can find their place in athletics",
+      "category": "athletics"
+    },
+    {
+      "id": "stem_achievements",
+      "gradeLevel": "high",
+      "fact": "Robotics team ranked top 5 nationally for three consecutive years",
+      "context": "Strong STEM programs with real-world applications",
+      "category": "stem"
+    },
+    {
+      "id": "diversity",
+      "gradeLevel": "all",
+      "fact": "Students from 42 zip codes and 15 countries",
+      "context": "Rich, diverse community of learners",
+      "category": "community"
+    },
+    {
+      "id": "financial_aid",
+      "gradeLevel": "all",
+      "fact": "$3.2 million in financial aid awarded annually",
+      "context": "28% of students receive financial assistance",
+      "category": "accessibility"
+    },
+    {
+      "id": "outdoor_education",
+      "gradeLevel": "elementary",
+      "fact": "20-acre campus with outdoor classroom and nature trail",
+      "context": "Learning extends beyond traditional classrooms",
+      "category": "environment"
+    },
+    {
+      "id": "technology_integration",
+      "gradeLevel": "all",
+      "fact": "1:1 device program with coding starting in kindergarten",
+      "context": "Preparing students for a digital future",
+      "category": "technology"
+    },
+    {
+      "id": "community_service",
+      "gradeLevel": "all",
+      "fact": "10,000+ community service hours completed annually",
+      "context": "Building compassionate leaders",
+      "category": "community"
+    },
+    {
+      "id": "college_counseling",
+      "gradeLevel": "high",
+      "fact": "Dedicated college counseling starting in 9th grade",
+      "context": "Four-year preparation for college success",
+      "category": "academic"
+    },
+    {
+      "id": "language_program",
+      "gradeLevel": "elementary",
+      "fact": "Spanish immersion program starting in PreK",
+      "context": "Building bilingual capabilities from the start",
+      "category": "languages"
+    },
+    {
+      "id": "learning_support",
+      "gradeLevel": "all",
+      "fact": "Full-time learning specialists and counselors at every level",
+      "context": "Supporting diverse learning styles and needs",
+      "category": "support"
+    },
+    {
+      "id": "alumni_network",
+      "gradeLevel": "all",
+      "fact": "5,000+ alumni network across 6 continents",
+      "context": "Lifetime connections and opportunities",
+      "category": "community"
+    },
+    {
+      "id": "accreditation",
+      "gradeLevel": "all",
+      "fact": "Fully accredited by SACS and member of NAIS",
+      "context": "Meeting highest educational standards",
+      "category": "credentials"
+    },
+    {
+      "id": "faculty_credentials",
+      "gradeLevel": "all",
+      "fact": "78% of faculty hold advanced degrees",
+      "context": "Expert educators passionate about their subjects",
+      "category": "faculty"
+    },
+    {
+      "id": "innovation_lab",
+      "gradeLevel": "all",
+      "fact": "State-of-the-art makerspace with 3D printers and laser cutters",
+      "context": "Bringing ideas to life through hands-on creation",
+      "category": "technology"
+    },
+    {
+      "id": "performing_arts_center",
+      "gradeLevel": "all",
+      "fact": "600-seat performing arts center with professional equipment",
+      "context": "Professional-quality venue for student performances",
+      "category": "facilities"
+    }
+  ]
+}
