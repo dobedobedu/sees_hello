@@ -152,10 +152,13 @@ export default function FamilyValuesQuestion({ data, onNext, onBack }: FamilyVal
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <button
-                onClick={() => toggleValue(value.id)}
-                disabled={!isSelected && selected.length >= 3}
-                className={`w-full p-4 rounded-xl flex items-center text-left transition-all ${
+              <div
+                onClick={() => {
+                  if (!(!isSelected && selected.length >= 3)) {
+                    toggleValue(value.id);
+                  }
+                }}
+                className={`w-full p-4 rounded-xl flex items-center text-left transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-[#fffef5] border-2 border-[#d4a017]'
                     : selected.length >= 3
@@ -218,7 +221,7 @@ export default function FamilyValuesQuestion({ data, onNext, onBack }: FamilyVal
                     </div>
                   </div>
                 )}
-              </button>
+              </div>
               
               {isSelected && isExpanded && value.details && (
                 <motion.div

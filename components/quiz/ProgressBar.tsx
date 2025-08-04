@@ -40,11 +40,11 @@ export default function ProgressBar({ currentStep, totalSteps, onStepClick, onBa
               <button
                 onClick={() => onStepClick && index < currentStep && onStepClick(index + 1)}
                 disabled={!onStepClick || index >= currentStep}
-                className={`relative flex items-center justify-center w-10 h-10 rounded-full text-sm font-semibold transition-all ${
+                className={`relative flex items-center justify-center w-10 h-10 rounded-full text-sm font-semibold transition-all overflow-hidden ${
                   index < currentStep - 1
                     ? 'bg-[#003825] text-white cursor-pointer hover:bg-[#004b34]'
                     : index === currentStep - 1
-                    ? 'bg-[#d4a017] text-white ring-4 ring-[#d4a017]/20 cursor-default'
+                    ? 'bg-[#d4a017] text-white shadow-lg shadow-[#d4a017]/30 cursor-default'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 } ${
                   index < currentStep - 1 ? 'hover:scale-110' : ''
