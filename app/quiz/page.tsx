@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import GradeLevelQuestion from '@/components/quiz/GradeLevelQuestion';
 import CurrentSituationQuestion from '@/components/quiz/CurrentSituationQuestion';
 import InterestsQuestion from '@/components/quiz/InterestsQuestion';
@@ -12,6 +12,7 @@ import FamilyValuesQuestion from '@/components/quiz/FamilyValuesQuestion';
 import TimelineQuestion from '@/components/quiz/TimelineQuestion';
 import ChildDescriptionQuestion from '@/components/quiz/ChildDescriptionQuestion';
 import ProgressBar from '@/components/quiz/ProgressBar';
+import MicroAffirmation from '@/components/quiz/MicroAffirmation';
 
 export interface QuizData {
   gradeLevel?: 'prek-k' | 'elementary' | 'middle' | 'high';
@@ -25,18 +26,29 @@ export interface QuizData {
 
 const QUIZ_STEPS = [
   { id: 1, title: 'Grade Level', component: GradeLevelQuestion },
-  { id: 2, title: 'Current Situation', component: CurrentSituationQuestion },
-  { id: 3, title: 'Interests', component: InterestsQuestion },
-  { id: 4, title: 'Family Values', component: FamilyValuesQuestion },
-  { id: 5, title: 'Timeline', component: TimelineQuestion },
+  { id: 2, title: 'Interests', component: InterestsQuestion },
+  { id: 3, title: 'Current Situation', component: CurrentSituationQuestion },
+  { id: 4, title: 'Timeline', component: TimelineQuestion },
+  { id: 5, title: 'Family Values', component: FamilyValuesQuestion },
   { id: 6, title: 'Tell Us More', component: ChildDescriptionQuestion },
 ];
 
 export default function QuizPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const quizPath = searchParams.get('path');
   const [currentStep, setCurrentStep] = useState(1);
   const [quizData, setQuizData] = useState<QuizData>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showAffirmation, setShowAffirmation] = useState(false);
+  
+  // For fast path, we only show Grade Level and Voice questions
+  const QUIZ_STEPS_FAST = [
+    { id: 1, title: 'Grade Level', component: GradeLevelQuestion },
+    { id: 2, title: 'Tell Us More', component: ChildDescriptionQuestion },
+  ];
+  
+  const STEPS = quizPath === 'fast' ? QUIZ_STEPS_FAST : QUIZ_STEPS;
 
   useEffect(() => {
     // Load saved progress from sessionStorage
@@ -59,10 +71,16 @@ export default function QuizPage() {
   const handleNext = (data: Partial<QuizData>) => {
     setQuizData(prev => ({ ...prev, ...data }));
     
-    if (currentStep === QUIZ_STEPS.length) {
+    // Show affirmation for 2 seconds
+    if (currentStep < STEPS.length) {
+      setShowAffirmation(true);
+      setTimeout(() => setShowAffirmation(false), 2000);
+    }
+    
+    if (currentStep === STEPS.length) {
       handleSubmit({ ...quizData, ...data });
     } else {
-      setCurrentStep(prev => prev + 1);
+      setTimeout(() => setCurrentStep(prev => prev + 1), 300);
     }
   };
 
@@ -92,7 +110,7 @@ export default function QuizPage() {
     }
   };
 
-  const CurrentQuestion = QUIZ_STEPS[currentStep - 1].component;
+  const CurrentQuestion = STEPS[currentStep - 1].component;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -115,10 +133,17 @@ export default function QuizPage() {
       {/* Progress Bar */}
       <ProgressBar 
         currentStep={currentStep} 
-        totalSteps={QUIZ_STEPS.length} 
+        totalSteps={STEPS.length} 
         onStepClick={handleStepClick}
         onBack={handleBack}
-        stepLabels={QUIZ_STEPS.map(s => s.title)}
+        stepLabels={STEPS.map(s => s.title)}
+      />
+
+      {/* Micro-Affirmation */}
+      <MicroAffirmation 
+        show={showAffirmation} 
+        gradeLevel={quizData.gradeLevel} 
+        currentStep={currentStep}
       />
 
       {/* Quiz Content */}
@@ -141,6 +166,19 @@ export default function QuizPage() {
           </motion.div>
         </AnimatePresence>
       </main>
+
+      {/* Skip & See Matches Button */}
+      {currentStep < STEPS.length && Object.keys(quizData).length > 0 && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1 }}
+          onClick={() => handleSubmit(quizData)}
+          className="fixed bottom-6 right-6 px-4 py-2 bg-white border border-gray-300 text-gray-600 rounded-full shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all text-sm font-medium"
+        >
+          Skip & See Matches →
+        </motion.button>
+      )}
 
     </div>
   );
