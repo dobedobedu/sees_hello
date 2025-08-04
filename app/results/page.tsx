@@ -116,40 +116,95 @@ export default function ResultsPage() {
 
       {/* Results Content */}
       <main className="max-w-6xl mx-auto px-6 py-12">
-        {/* Match Score */}
+        {/* Fit Summary Tags */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
           <div className="inline-flex items-center px-4 py-2 bg-[#d4a017]/20 text-[#d4a017] rounded-full text-sm font-medium mb-4">
             <CheckCircle className="w-4 h-4 mr-2" />
-            Analysis Complete
+            Perfect Match Found
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            {results.matchScore}% Match!
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Your child's personalized SSES experience
           </h1>
           
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            We found amazing connections between your child's potential and our community
-          </p>
+          {/* Fit Summary Tags */}
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
+            {results.keyInsights?.slice(0, 4).map((insight, idx) => (
+              <span
+                key={idx}
+                className="px-4 py-2 bg-[#004b34] text-white rounded-full text-sm font-medium"
+              >
+                {insight}
+              </span>
+            )) || [
+              'Small Classes',
+              'STEAM Excellence', 
+              'Athletic Champions',
+              'Global Perspective'
+            ].map((tag, idx) => (
+              <span
+                key={idx}
+                className="px-4 py-2 bg-[#004b34] text-white rounded-full text-sm font-medium"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
         </motion.div>
 
-        {/* Personalized Message */}
+        {/* Your Personalized Tour Preview */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="bg-white rounded-2xl shadow-lg p-8 mb-8"
         >
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Personalized Message</h2>
-          <div className="prose prose-lg text-gray-700 whitespace-pre-wrap">
-            {results.personalizedMessage}
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Personalized Tour Preview</h2>
+          
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-[#004b34] mb-3">What you'll experience on your tour:</h3>
+            <div className="space-y-3">
+              <div className="flex items-start">
+                <svg className="w-5 h-5 text-[#d4a017] mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="text-gray-700">
+                  <strong>Visit the Marine Science Lab</strong> - See where students like {results.matchedStories[0]?.firstName || 'Emma'} conduct real research
+                </span>
+              </div>
+              
+              <div className="flex items-start">
+                <svg className="w-5 h-5 text-[#d4a017] mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="text-gray-700">
+                  <strong>Meet {results.matchedFaculty[0]?.firstName || 'Coach Turner'}</strong> - Your child's potential mentor in {results.matchedFaculty[0]?.title || 'athletics'}
+                </span>
+              </div>
+              
+              <div className="flex items-start">
+                <svg className="w-5 h-5 text-[#d4a017] mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="text-gray-700">
+                  <strong>Sit in on a class</strong> - Experience our small classes and personalized teaching approach
+                </span>
+              </div>
+            </div>
+            
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-600 italic">
+                "Schedule your tour to learn more about {results.matchedStories[0]?.achievement || 'our amazing student achievements'} and how SSES can support your child's unique journey."
+              </p>
+            </div>
           </div>
         </motion.div>
 
-        {/* Matched Stories */}
+        {/* Hero Story Card */}
         {results.matchedStories.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -157,9 +212,9 @@ export default function ResultsPage() {
             transition={{ delay: 0.3 }}
             className="mb-8"
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Students Like Yours</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {results.matchedStories.map((story, index) => (
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">A Student Just Like Yours</h2>
+            <div className="max-w-2xl mx-auto">
+              {results.matchedStories.slice(0, 1).map((story, index) => (
                 <motion.div
                   key={story.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -230,37 +285,32 @@ export default function ResultsPage() {
           <p className="text-lg mb-6 text-white/90">
             Schedule your personalized tour and meet the people who will help your child thrive
           </p>
-          <Link
-            href="/booking"
-            className="inline-flex items-center px-8 py-4 bg-white text-[#003825] rounded-md font-semibold text-lg hover:bg-gray-50 transition-all"
-          >
-            <Calendar className="w-5 h-5 mr-2" />
-            Book Your Tour Now
-            <ArrowRight className="w-5 h-5 ml-2" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Link
+              href="/booking"
+              className="inline-flex items-center px-8 py-4 bg-white text-[#003825] rounded-md font-semibold text-lg hover:bg-gray-50 transition-all"
+            >
+              <Calendar className="w-5 h-5 mr-2" />
+              Book Your Tour Now
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Link>
+            
+            <button
+              onClick={() => {
+                const subject = encodeURIComponent('Check out this school match for our child');
+                const body = encodeURIComponent(`I just took the SSES personalized quiz and found some amazing matches for our child!\n\nKey strengths identified:\n${results.keyInsights?.join('\n') || 'Small Classes • STEAM Excellence • Athletic Champions'}\n\nTake the quiz yourself: ${window.location.origin}/quiz`);
+                window.location.href = `mailto:?subject=${subject}&body=${body}`;
+              }}
+              className="inline-flex items-center px-6 py-3 bg-transparent border-2 border-white text-white rounded-md font-semibold hover:bg-white/10 transition-all"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              Send to Partner
+            </button>
+          </div>
         </motion.div>
 
-        {/* Key Insights */}
-        {results.keyInsights && results.keyInsights.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-            className="mt-8 text-center"
-          >
-            <p className="text-sm text-gray-500 mb-2">Key Insights:</p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {results.keyInsights.map((insight, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
-                >
-                  {insight}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        )}
       </main>
     </div>
   );
