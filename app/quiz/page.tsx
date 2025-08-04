@@ -12,7 +12,6 @@ import FamilyValuesQuestion from '@/components/quiz/FamilyValuesQuestion';
 import TimelineQuestion from '@/components/quiz/TimelineQuestion';
 import ChildDescriptionQuestion from '@/components/quiz/ChildDescriptionQuestion';
 import ProgressBar from '@/components/quiz/ProgressBar';
-import MicroAffirmation from '@/components/quiz/MicroAffirmation';
 
 export interface QuizData {
   gradeLevel?: 'prek-k' | 'elementary' | 'middle' | 'high';
@@ -40,15 +39,6 @@ export default function QuizPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [quizData, setQuizData] = useState<QuizData>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showAffirmation, setShowAffirmation] = useState(false);
-  
-  // For fast path, we only show Grade Level and Voice questions
-  const QUIZ_STEPS_FAST = [
-    { id: 1, title: 'Grade Level', component: GradeLevelQuestion },
-    { id: 2, title: 'Tell Us More', component: ChildDescriptionQuestion },
-  ];
-  
-  const STEPS = quizPath === 'fast' ? QUIZ_STEPS_FAST : QUIZ_STEPS;
 
   useEffect(() => {
     // Load saved progress from sessionStorage
@@ -71,16 +61,10 @@ export default function QuizPage() {
   const handleNext = (data: Partial<QuizData>) => {
     setQuizData(prev => ({ ...prev, ...data }));
     
-    // Show affirmation for 2 seconds
-    if (currentStep < STEPS.length) {
-      setShowAffirmation(true);
-      setTimeout(() => setShowAffirmation(false), 2000);
-    }
-    
-    if (currentStep === STEPS.length) {
+    if (currentStep === QUIZ_STEPS.length) {
       handleSubmit({ ...quizData, ...data });
     } else {
-      setTimeout(() => setCurrentStep(prev => prev + 1), 300);
+      setCurrentStep(prev => prev + 1);
     }
   };
 
@@ -110,7 +94,7 @@ export default function QuizPage() {
     }
   };
 
-  const CurrentQuestion = STEPS[currentStep - 1].component;
+  const CurrentQuestion = QUIZ_STEPS[currentStep - 1].component;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -133,17 +117,10 @@ export default function QuizPage() {
       {/* Progress Bar */}
       <ProgressBar 
         currentStep={currentStep} 
-        totalSteps={STEPS.length} 
+        totalSteps={QUIZ_STEPS.length} 
         onStepClick={handleStepClick}
         onBack={handleBack}
-        stepLabels={STEPS.map(s => s.title)}
-      />
-
-      {/* Micro-Affirmation */}
-      <MicroAffirmation 
-        show={showAffirmation} 
-        gradeLevel={quizData.gradeLevel} 
-        currentStep={currentStep}
+        stepLabels={QUIZ_STEPS.map(s => s.title)}
       />
 
       {/* Quiz Content */}
@@ -168,7 +145,7 @@ export default function QuizPage() {
       </main>
 
       {/* Skip & See Matches Button */}
-      {currentStep < STEPS.length && Object.keys(quizData).length > 0 && (
+      {currentStep < QUIZ_STEPS.length && Object.keys(quizData).length > 0 && (
         <motion.button
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}

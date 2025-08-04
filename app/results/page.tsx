@@ -286,14 +286,16 @@ export default function ResultsPage() {
             Schedule your personalized tour and meet the people who will help your child thrive
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link
-              href="/booking"
+            <a
+              href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1pPQ9xNbaHdCjn0RLmWLqhkuL5ePgy2tEp6YAT6tCvHG8emnJQr3gayPfmsnOPCbze_Q_ccJcD"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center px-8 py-4 bg-white text-[#003825] rounded-md font-semibold text-lg hover:bg-gray-50 transition-all"
             >
               <Calendar className="w-5 h-5 mr-2" />
               Book Your Tour Now
               <ArrowRight className="w-5 h-5 ml-2" />
-            </Link>
+            </a>
             
             <button
               onClick={() => {
