@@ -124,7 +124,7 @@ export default function FamilyValuesQuestion({ data, onNext, onBack }: FamilyVal
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto pb-20">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -245,20 +245,25 @@ export default function FamilyValuesQuestion({ data, onNext, onBack }: FamilyVal
         })}
       </div>
 
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
-        onClick={handleContinue}
-        disabled={selected.length === 0}
-        className={`w-full py-4 rounded-md font-semibold text-lg transition-all relative z-10 ${
-          selected.length > 0
-            ? 'bg-[#003825] text-white hover:bg-[#004b34]'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-        }`}
-      >
-        Continue
-      </motion.button>
+      {/* Sticky Continue Button */}
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-50 border-t border-gray-200 p-4">
+        <div className="max-w-3xl mx-auto">
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            onClick={handleContinue}
+            disabled={selected.length === 0}
+            className={`w-full py-4 rounded-md font-semibold text-lg transition-all ${
+              selected.length > 0
+                ? 'bg-[#003825] text-white hover:bg-[#004b34]'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            Continue ({selected.length}/3 selected)
+          </motion.button>
+        </div>
+      </div>
     </div>
   );
 }
