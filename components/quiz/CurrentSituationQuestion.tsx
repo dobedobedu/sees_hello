@@ -46,17 +46,17 @@ export default function CurrentSituationQuestion({ data, onNext }: CurrentSituat
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
+        className="text-center mb-6"
       >
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
           What brings you here today?
         </h2>
-        <p className="text-gray-600">
+        <p className="text-gray-600 text-sm md:text-base">
           Understanding your situation helps us provide relevant information
         </p>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-3">
         {SITUATIONS.map((situation, index) => {
           const Icon = situation.icon;
           return (
@@ -68,13 +68,23 @@ export default function CurrentSituationQuestion({ data, onNext }: CurrentSituat
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => handleSelect(situation.id)}
-              className={`p-6 rounded-xl bg-white hover:bg-gray-50 transition-all border-2 text-left ${
+              className={`p-4 md:p-5 rounded-xl bg-white hover:bg-gray-50 transition-all border-2 text-left ${
                 data.currentSituation === situation.id ? 'border-[#d4a017] bg-[#fffef5]' : 'border-gray-200'
               }`}
             >
-              <Icon className="w-8 h-8 text-[#004b34] mb-3" />
-              <h3 className="font-semibold text-lg text-gray-900 mb-1">{situation.title}</h3>
-              <p className="text-gray-600 text-sm">{situation.description}</p>
+              <div className="flex items-center">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-3 flex-shrink-0 ${
+                  data.currentSituation === situation.id ? 'bg-[#004b34]' : 'bg-gray-100'
+                }`}>
+                  <Icon className={`w-6 h-6 ${
+                    data.currentSituation === situation.id ? 'text-white' : 'text-gray-600'
+                  }`} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-base md:text-lg text-gray-900">{situation.title}</h3>
+                  <p className="text-gray-600 text-xs md:text-sm">{situation.description}</p>
+                </div>
+              </div>
             </motion.button>
           );
         })}

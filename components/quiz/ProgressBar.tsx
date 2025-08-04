@@ -13,7 +13,7 @@ export default function ProgressBar({ currentStep, totalSteps, onStepClick, onBa
 
   return (
     <div className="w-full bg-white border-b border-gray-200">
-      <div className="max-w-4xl mx-auto px-6 py-4 pb-8">
+      <div className="max-w-4xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between mb-2">
           {onBack && (
             <button
@@ -52,11 +52,6 @@ export default function ProgressBar({ currentStep, totalSteps, onStepClick, onBa
               >
                 {index + 1}
               </button>
-              {stepLabels && stepLabels[index] && currentStep === index + 1 && (
-                <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-[#004b34] whitespace-nowrap">
-                  {stepLabels[index]}
-                </div>
-              )}
               {index < totalSteps - 1 && (
                 <div className="flex-1 h-1 mx-2">
                   <div className="h-full bg-gray-200 rounded-full overflow-hidden">

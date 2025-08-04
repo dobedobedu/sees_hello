@@ -251,7 +251,7 @@ export default function FamilyValuesQuestion({ data, onNext, onBack }: FamilyVal
         transition={{ delay: 0.6 }}
         onClick={handleContinue}
         disabled={selected.length === 0}
-        className={`w-full py-4 rounded-md font-semibold text-lg transition-all ${
+        className={`w-full py-4 rounded-md font-semibold text-lg transition-all relative z-10 ${
           selected.length > 0
             ? 'bg-[#003825] text-white hover:bg-[#004b34]'
             : 'bg-gray-200 text-gray-400 cursor-not-allowed'

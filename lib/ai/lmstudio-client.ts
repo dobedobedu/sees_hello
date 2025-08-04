@@ -120,9 +120,23 @@ export class LMStudioClient {
     );
     score += commonInterests.length * 20;
     
-    // Grade level match
-    if (story.gradeLevel === quiz.gradeLevel) {
-      score += 30;
+    // Grade level match - map quiz levels to story levels
+    if (story.gradeLevel) {
+      const gradeLevelMap: { [key: string]: string[] } = {
+        'lower': ['prek-k', 'elementary'],
+        'intermediate': ['elementary'],
+        'middle': ['middle'],
+        'high': ['high']
+      };
+      
+      // Check if the story's grade level matches any of the mapped quiz levels
+      const matchesGradeLevel = Object.entries(gradeLevelMap).some(([storyLevel, quizLevels]) => {
+        return story.gradeLevel === storyLevel && quizLevels.includes(quiz.gradeLevel);
+      });
+      
+      if (matchesGradeLevel) {
+        score += 30;
+      }
     }
     
     // Description keyword matching

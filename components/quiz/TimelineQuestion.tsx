@@ -50,17 +50,17 @@ export default function TimelineQuestion({ data, onNext }: TimelineQuestionProps
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
+        className="text-center mb-6"
       >
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
           When are you looking to enroll?
         </h2>
-        <p className="text-gray-600">
+        <p className="text-gray-600 text-sm md:text-base">
           This helps us provide timely information and availability
         </p>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-3">
         {TIMELINES.map((timeline, index) => {
           const Icon = timeline.icon;
           return (
@@ -72,15 +72,23 @@ export default function TimelineQuestion({ data, onNext }: TimelineQuestionProps
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => handleSelect(timeline.id)}
-              className={`p-6 rounded-xl bg-white hover:bg-gray-50 transition-all border-2 ${
+              className={`p-4 md:p-5 rounded-xl bg-white hover:bg-gray-50 transition-all border-2 text-left ${
                 data.timeline === timeline.id ? 'border-[#d4a017] bg-[#fffef5]' : 'border-gray-200'
               }`}
             >
-              <div className={`w-14 h-14 mx-auto mb-4 rounded-full ${timeline.color} flex items-center justify-center`}>
-                <Icon className="w-7 h-7 text-white" />
+              <div className="flex items-center">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-3 flex-shrink-0 ${
+                  data.timeline === timeline.id ? 'bg-[#004b34]' : 'bg-gray-100'
+                }`}>
+                  <Icon className={`w-6 h-6 ${
+                    data.timeline === timeline.id ? 'text-white' : 'text-gray-600'
+                  }`} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-base md:text-lg text-gray-900">{timeline.title}</h3>
+                  <p className="text-gray-600 text-xs md:text-sm">{timeline.description}</p>
+                </div>
               </div>
-              <h3 className="font-semibold text-lg text-gray-900 mb-1">{timeline.title}</h3>
-              <p className="text-gray-600 text-sm">{timeline.description}</p>
             </motion.button>
           );
         })}
