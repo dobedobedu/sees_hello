@@ -40,6 +40,14 @@ export default function ResultsPage() {
           facts: factsData.facts as any[]
         });
 
+        console.log('Analysis result:', {
+          storiesCount: analysisResult.matchedStories.length,
+          stories: analysisResult.matchedStories.map(s => ({ 
+            firstName: s.firstName, 
+            id: s.id 
+          }))
+        });
+
         setResults(analysisResult);
       } catch (err) {
         console.error('Analysis failed:', err);

@@ -40,21 +40,41 @@ export class LMStudioClient {
     const prompt = this.buildPrompt(quiz, matchedStories, matchedFaculty, relevantFacts);
     
     try {
+      const requestBody = {
+        messages: [
+          { 
+            role: 'system', 
+            content: 'You are an admissions counselor for Saint Stephen\'s Episcopal School. Create warm, personalized messages that connect families with specific student success stories and faculty members.' 
+          },
+          { 
+            role: 'user', 
+            content: prompt 
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 500
+      };
+      
+      console.log('Sending to LMStudio:', { 
+        url: `${this.baseUrl}/chat/completions`,
+        hasMessages: !!requestBody.messages,
+        messageCount: requestBody.messages.length 
+      });
+      
       const response = await fetch(`${this.baseUrl}/chat/completions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [
-            { role: 'system', content: 'You are an admissions counselor for Saint Stephen\'s Episcopal School. Create warm, personalized messages that connect families with specific student success stories and faculty members.' },
-            { role: 'user', content: prompt }
-          ],
-          temperature: 0.7,
-          max_tokens: 500
-        })
+        body: JSON.stringify(requestBody)
       });
 
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('LMStudio error response:', errorText);
+        throw new Error(`LMStudio returned ${response.status}: ${errorText}`);
+      }
+
       const data = await response.json();
-      const message = data.choices[0].message.content;
+      const message = data.choices?.[0]?.message?.content || 'Unable to generate personalized message';
       
       return {
         matchScore: this.calculateMatchScore(quiz, matchedStories, matchedFaculty),
@@ -66,20 +86,29 @@ export class LMStudioClient {
         processingTime: Date.now() - startTime
       };
     } catch (error) {
-      console.error('LMStudio analysis failed:', error);
-      // Return fallback response
+      console.error('LMStudio analysis failed, using fallback:', error);
+      // Return fallback response with properly matched stories
       return this.getFallbackResponse(quiz, matchedStories, matchedFaculty);
     }
   }
 
   private findMatchingStories(quiz: QuizResponse, stories: StudentStory[]): StudentStory[] {
-    return stories
+    const scoredStories = stories
       .map(story => ({
         story,
         score: this.calculateStoryScore(quiz, story)
       }))
-      .sort((a, b) => b.score - a.score)
-      .map(item => item.story);
+      .sort((a, b) => b.score - a.score);
+    
+    const topStories = scoredStories.slice(0, 3).map(item => item.story);
+    
+    console.log('Top matched stories:', topStories.map(s => ({
+      id: s.id,
+      firstName: s.firstName,
+      score: scoredStories.find(sc => sc.story.id === s.id)?.score
+    })));
+    
+    return topStories;
   }
 
   private calculateStoryScore(quiz: QuizResponse, story: StudentStory): number {
@@ -198,7 +227,7 @@ Keep it conversational, warm, and specific. Avoid generic education jargon.`;
     faculty: FacultyProfile[]
   ): AnalysisResult {
     const fallbackMessage = `
-Thank you for sharing about your ${quiz.gradeLevel === 'elementary' ? 'elementary' : quiz.gradeLevel} student! 
+Thank you for sharing about your ${quiz.gradeLevel === 'lower' ? 'Lower School' : quiz.gradeLevel === 'intermediate' ? 'Intermediate School' : quiz.gradeLevel === 'middle' ? 'Middle School' : 'High School'} student! 
 Based on what you've told us about their interests in ${quiz.interests.slice(0, 2).join(' and ')}, 
 we believe Saint Stephen's could be an excellent fit.
 
@@ -216,7 +245,7 @@ Schedule your personalized tour to see our approach in action!
       matchedStories: stories.slice(0, 2),
       matchedFaculty: faculty.slice(0, 1),
       keyInsights: this.extractKeyInsights(quiz),
-      provider: 'lmstudio',
+      provider: 'lmstudio-fallback',  // Mark as fallback for debugging
       processingTime: 0
     };
   }
