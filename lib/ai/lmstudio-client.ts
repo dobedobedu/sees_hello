@@ -21,8 +21,10 @@ export class LMStudioClient {
 
   async isAvailable(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/models`);
-      return response.ok;
+      // Use API route to avoid CORS issues
+      const response = await fetch(`/api/lmstudio?endpoint=models&baseUrl=${encodeURIComponent(this.baseUrl)}`);
+      const data = await response.json();
+      return data.success;
     } catch {
       return false;
     }
@@ -61,19 +63,24 @@ export class LMStudioClient {
         messageCount: requestBody.messages.length 
       });
       
-      const response = await fetch(`${this.baseUrl}/chat/completions`, {
+      const response = await fetch(`/api/lmstudio?endpoint=chat/completions&baseUrl=${encodeURIComponent(this.baseUrl)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('LMStudio error response:', errorText);
-        throw new Error(`LMStudio returned ${response.status}: ${errorText}`);
+        const errorData = await response.json();
+        console.error('LMStudio error response:', errorData);
+        throw new Error(errorData.error || 'LMStudio request failed');
       }
 
-      const data = await response.json();
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error(result.error || 'LMStudio request failed');
+      }
+      
+      const data = result.data;
       const message = data.choices?.[0]?.message?.content || 'Unable to generate personalized message';
       
       return {

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mic, MicOff, Type, Loader2, AlertCircle } from 'lucide-react';
 import { AudioRecorder } from '@/lib/audio/recorder';
-import { OpenAIClient } from '@/lib/ai/openai-client';
+import { AIService } from '@/lib/ai/ai-service';
 
 interface ChildDescriptionQuestionProps {
   data: any;
@@ -28,13 +28,13 @@ export default function ChildDescriptionQuestion({
   const [recordingTime, setRecordingTime] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const audioRecorderRef = useRef<AudioRecorder | null>(null);
-  const openAIClientRef = useRef<OpenAIClient | null>(null);
+  const aiServiceRef = useRef<AIService | null>(null);
   const timerRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    // Initialize audio recorder and OpenAI client
+    // Initialize audio recorder and AI service
     audioRecorderRef.current = new AudioRecorder();
-    openAIClientRef.current = new OpenAIClient();
+    aiServiceRef.current = AIService.getInstance();
 
     return () => {
       if (timerRef.current) {
@@ -68,7 +68,7 @@ export default function ChildDescriptionQuestion({
   };
 
   const stopRecording = async () => {
-    if (!audioRecorderRef.current || !openAIClientRef.current) return;
+    if (!audioRecorderRef.current || !aiServiceRef.current) return;
     
     setIsRecording(false);
     if (timerRef.current) {
@@ -79,20 +79,13 @@ export default function ChildDescriptionQuestion({
       setIsTranscribing(true);
       const audioBlob = await audioRecorderRef.current.stopRecording();
       
-      // Check if OpenAI is available
-      const openAIAvailable = await openAIClientRef.current.isAvailable();
-      
-      if (openAIAvailable) {
-        // Use OpenAI Whisper for transcription (simplest approach)
-        const result = await openAIClientRef.current.transcribe(audioBlob);
-        const newTranscript = result.text;
-        setTranscript(prev => prev + ' ' + newTranscript);
-        setDescription(prev => (prev + ' ' + newTranscript).trim());
-      } else {
-        setError('Please set NEXT_PUBLIC_OPENAI_API_KEY in your environment variables.');
-      }
-    } catch (err) {
-      setError('Failed to transcribe audio. Please try again.');
+      // Use the AI service which will use the configured provider
+      const result = await aiServiceRef.current.transcribe(audioBlob);
+      const newTranscript = result.text;
+      setTranscript(prev => prev + ' ' + newTranscript);
+      setDescription(prev => (prev + ' ' + newTranscript).trim());
+    } catch (err: any) {
+      setError(err.message || 'Failed to transcribe audio. Please check your settings.');
       console.error('Transcription error:', err);
     } finally {
       setIsTranscribing(false);

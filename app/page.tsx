@@ -9,10 +9,16 @@ export default function HomePage() {
     <div className="min-h-screen bg-white">
       {/* Navigation */}
       <nav className="px-4 py-3 bg-[#004b34] fixed w-full z-50">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="font-bold text-lg text-white">
             Saint Stephen&apos;s Episcopal School
           </div>
+          <Link 
+            href="/admin" 
+            className="text-white/60 hover:text-white text-sm transition-colors"
+          >
+            Admin
+          </Link>
         </div>
       </nav>
 
