@@ -118,7 +118,7 @@ export default function ChildDescriptionQuestion({
 
       {/* Input Mode Toggle */}
       <div className="flex justify-center mb-6">
-        <div className="bg-[#004b34] rounded-full p-1 flex">
+        <div className="bg-[#004b34] rounded-full p-1 flex overflow-hidden">
           <button
             onClick={() => setInputMode('text')}
             className={`px-4 py-2 rounded-full flex items-center transition-all ${

@@ -26,15 +26,24 @@ export default function AdminPage() {
   const [saved, setSaved] = useState(false);
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [hasLoadedSettings, setHasLoadedSettings] = useState(false);
 
   useEffect(() => {
-    // Load settings from environment variables
-    setSettings(prev => ({
-      ...prev,
-      openaiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
-      groqKey: process.env.NEXT_PUBLIC_GROQ_API_KEY || '',
-      lmstudioUrl: process.env.NEXT_PUBLIC_LMSTUDIO_URL || 'http://localhost:1234/v1'
-    }));
+    // Load settings from localStorage first
+    const savedSettings = localStorage.getItem('aiSettings');
+    if (savedSettings) {
+      const parsed = JSON.parse(savedSettings);
+      setSettings(parsed);
+      setHasLoadedSettings(true);
+    } else {
+      // Fall back to environment variables
+      setSettings(prev => ({
+        ...prev,
+        openaiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
+        groqKey: process.env.NEXT_PUBLIC_GROQ_API_KEY || '',
+        lmstudioUrl: process.env.NEXT_PUBLIC_LMSTUDIO_URL || 'http://localhost:1234/v1'
+      }));
+    }
   }, []);
 
   const handleSave = () => {
@@ -103,6 +112,9 @@ export default function AdminPage() {
             <div className="flex items-center mb-6">
               <Brain className="w-5 h-5 text-[#004b34] mr-2" />
               <h2 className="text-lg font-semibold">AI Provider Settings</h2>
+              {hasLoadedSettings && (
+                <span className="text-xs text-green-600 ml-2">(Loaded from saved settings)</span>
+              )}
             </div>
 
             <div className="space-y-4">
