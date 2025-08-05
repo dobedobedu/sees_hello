@@ -132,13 +132,10 @@ export default function ChildDescriptionQuestion({
           </button>
           <button
             onClick={() => setInputMode('voice')}
-            disabled={!recognitionRef.current}
             className={`px-4 py-2 rounded-full flex items-center transition-all ${
               inputMode === 'voice'
                 ? 'bg-[#d4a017] text-white'
                 : 'text-white/70 hover:text-white'
-            } ${
-              !recognitionRef.current ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
             <Mic className="w-4 h-4 mr-2" />

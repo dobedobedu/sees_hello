@@ -73,6 +73,8 @@ export class AIService {
       // Use browser's built-in speech recognition
       return this.useBrowserSpeechRecognition(audioBlob);
     }
+    
+    // For API-based transcription, check which provider is configured
 
     // Use API-based transcription
     switch (this.provider) {

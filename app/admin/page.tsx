@@ -21,7 +21,7 @@ export default function AdminPage() {
     groqKey: '',
     lmstudioUrl: 'http://localhost:1234/v1',
     voiceEnabled: true,
-    voiceProvider: 'openai'
+    voiceProvider: 'api'
   });
   const [saved, setSaved] = useState(false);
   const [testing, setTesting] = useState(false);
@@ -225,12 +225,16 @@ export default function AdminPage() {
                     onChange={(e) => setSettings(prev => ({ ...prev, voiceProvider: e.target.value as any }))}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#d4a017] focus:border-[#d4a017]"
                   >
-                    <option value="openai">OpenAI Whisper (Most Accurate)</option>
-                    <option value="browser">Browser Speech API (Free)</option>
+                    <option value="api">API-based Whisper (Uses selected provider)</option>
+                    <option value="browser">Browser Speech API (Free but less accurate)</option>
                   </select>
                   <p className="text-xs text-gray-600 mt-1">
-                    {settings.voiceProvider === 'openai' 
-                      ? 'Requires OpenAI API key. Costs ~$0.006 per minute.'
+                    {settings.voiceProvider === 'api' 
+                      ? settings.aiProvider === 'groq' 
+                        ? 'Uses Groq Whisper Large v3. Free tier available!'
+                        : settings.aiProvider === 'openai'
+                        ? 'Uses OpenAI Whisper. Costs ~$0.006 per minute.'
+                        : 'LMStudio does not support audio transcription.'
                       : 'Free but less accurate. Works offline.'}
                   </p>
                 </div>
