@@ -2,7 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mic, MicOff, Type, Loader2 } from 'lucide-react';
+import { Mic, MicOff, Type, Loader2, AlertCircle } from 'lucide-react';
+import { AudioRecorder } from '@/lib/audio/recorder';
+import { OpenAIClient } from '@/lib/ai/openai-client';
 
 interface ChildDescriptionQuestionProps {
   data: any;
@@ -21,42 +23,18 @@ export default function ChildDescriptionQuestion({
   const [inputMode, setInputMode] = useState<'voice' | 'text'>('text');
   const [description, setDescription] = useState(data.childDescription || '');
   const [isRecording, setIsRecording] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [recordingTime, setRecordingTime] = useState(0);
-  const recognitionRef = useRef<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const audioRecorderRef = useRef<AudioRecorder | null>(null);
+  const openAIClientRef = useRef<OpenAIClient | null>(null);
   const timerRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    // Check if Web Speech API is available
-    if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = true;
-      recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = 'en-US';
-
-      recognitionRef.current.onresult = (event: any) => {
-        let finalTranscript = '';
-        let interimTranscript = '';
-        
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const transcript = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-            finalTranscript += transcript + ' ';
-          } else {
-            interimTranscript += transcript;
-          }
-        }
-        
-        setTranscript(prev => prev + finalTranscript);
-        setDescription(prev => prev + finalTranscript);
-      };
-
-      recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
-        setIsRecording(false);
-      };
-    }
+    // Initialize audio recorder and OpenAI client
+    audioRecorderRef.current = new AudioRecorder();
+    openAIClientRef.current = new OpenAIClient();
 
     return () => {
       if (timerRef.current) {
@@ -65,11 +43,14 @@ export default function ChildDescriptionQuestion({
     };
   }, []);
 
-  const startRecording = () => {
-    if (recognitionRef.current) {
+  const startRecording = async () => {
+    if (!audioRecorderRef.current) return;
+    
+    try {
+      setError(null);
+      await audioRecorderRef.current.startRecording();
       setIsRecording(true);
       setRecordingTime(0);
-      recognitionRef.current.start();
       
       timerRef.current = setInterval(() => {
         setRecordingTime(prev => {
@@ -80,16 +61,41 @@ export default function ChildDescriptionQuestion({
           return prev + 1;
         });
       }, 1000);
+    } catch (err) {
+      setError('Failed to access microphone. Please check permissions.');
+      console.error('Recording error:', err);
     }
   };
 
-  const stopRecording = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-    }
+  const stopRecording = async () => {
+    if (!audioRecorderRef.current || !openAIClientRef.current) return;
+    
     setIsRecording(false);
     if (timerRef.current) {
       clearInterval(timerRef.current);
+    }
+    
+    try {
+      setIsTranscribing(true);
+      const audioBlob = await audioRecorderRef.current.stopRecording();
+      
+      // Check if OpenAI is available
+      const openAIAvailable = await openAIClientRef.current.isAvailable();
+      
+      if (openAIAvailable) {
+        // Use OpenAI Whisper for transcription (simplest approach)
+        const result = await openAIClientRef.current.transcribe(audioBlob);
+        const newTranscript = result.text;
+        setTranscript(prev => prev + ' ' + newTranscript);
+        setDescription(prev => (prev + ' ' + newTranscript).trim());
+      } else {
+        setError('Please set NEXT_PUBLIC_OPENAI_API_KEY in your environment variables.');
+      }
+    } catch (err) {
+      setError('Failed to transcribe audio. Please try again.');
+      console.error('Transcription error:', err);
+    } finally {
+      setIsTranscribing(false);
     }
   };
 
@@ -174,13 +180,18 @@ export default function ChildDescriptionQuestion({
           <div className="mb-6">
             <button
               onClick={isRecording ? stopRecording : startRecording}
+              disabled={isTranscribing}
               className={`w-32 h-32 rounded-full mx-auto flex items-center justify-center transition-all ${
                 isRecording
                   ? 'bg-red-500 hover:bg-red-600 animate-pulse'
+                  : isTranscribing
+                  ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-gradient-to-br from-[#004b34] to-[#003825] hover:from-[#003825] hover:to-[#002518] hover:shadow-lg'
               }`}
             >
-              {isRecording ? (
+              {isTranscribing ? (
+                <Loader2 className="w-12 h-12 text-white animate-spin" />
+              ) : isRecording ? (
                 <MicOff className="w-12 h-12 text-white" />
               ) : (
                 <Mic className="w-12 h-12 text-white" />
@@ -199,6 +210,9 @@ export default function ChildDescriptionQuestion({
                 </div>
               </div>
             )}
+            {isTranscribing && (
+              <p className="mt-4 text-gray-600">Transcribing your message...</p>
+            )}
           </div>
 
           {/* Transcript Display */}
@@ -209,7 +223,14 @@ export default function ChildDescriptionQuestion({
             </div>
           )}
 
-          {!isRecording && !description && (
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start">
+              <AlertCircle className="w-5 h-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
+              <p className="text-red-700 text-sm">{error}</p>
+            </div>
+          )}
+
+          {!isRecording && !description && !error && (
             <p className="text-gray-600">
               Tap the microphone to start recording (up to 60 seconds)
             </p>
