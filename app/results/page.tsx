@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Sparkles, CheckCircle, Calendar, ArrowRight, Home, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { LMStudioClient } from '@/lib/ai/lmstudio-client';
+import { AIService } from '@/lib/ai/ai-service';
 import { QuizResponse, AnalysisResult } from '@/lib/ai/types';
 import storiesData from '@/knowledge/stories.json';
 import facultyData from '@/knowledge/faculty.json';
@@ -30,11 +30,11 @@ export default function ResultsPage() {
 
         const quizData: QuizResponse = JSON.parse(quizDataStr);
         
-        // Initialize LMStudio client
-        const client = new LMStudioClient();
+        // Use the AI service which respects admin settings
+        const aiService = AIService.getInstance();
         
         // Perform analysis
-        const analysisResult = await client.analyze(quizData, {
+        const analysisResult = await aiService.analyze(quizData, {
           stories: storiesData.stories as any[],
           faculty: facultyData.faculty as any[],
           facts: factsData.facts as any[]
