@@ -75,9 +75,9 @@ export default function ResultsPage() {
     
 Tour highlights we selected:
 ${selectedTourItems.map(itemId => {
-      const option = tourOptions.find(opt => opt.id === itemId);
+      const option = tourOptions?.find(opt => opt.id === itemId);
       return option ? `• ${option.title}` : '';
-    }).filter(Boolean).join('\n')}
+    }).filter(Boolean).join('\n') || 'None selected yet'}
 
 Check out our personalized results: ${shareData.link}`;
 
@@ -92,7 +92,7 @@ Check out our personalized results: ${shareData.link}`;
     }
   };
 
-  const tourOptions = [
+  const tourOptions = results ? [
     {
       id: 'marine-lab',
       title: 'Visit the Marine Science Lab',
@@ -100,8 +100,8 @@ Check out our personalized results: ${shareData.link}`;
     },
     {
       id: 'meet-coach',
-      title: `Meet ${results?.matchedFaculty[0]?.firstName || 'Coach Turner'}`,
-      description: `${results?.matchedFaculty[0]?.title || 'Athletic Director & Tennis Coach'}`
+      title: `Meet ${results.matchedFaculty?.[0]?.firstName || 'Coach Turner'}`,
+      description: `${results.matchedFaculty?.[0]?.title || 'Athletic Director & Tennis Coach'}`
     },
     {
       id: 'class-visit',
@@ -123,7 +123,7 @@ Check out our personalized results: ${shareData.link}`;
       title: 'Watch team practice',
       description: '19 varsity sports, 20 state championships'
     }
-  ];
+  ] : [];
 
   const toggleTourItem = (itemId: string) => {
     if (selectedTourItems.includes(itemId)) {
@@ -222,7 +222,7 @@ Check out our personalized results: ${shareData.link}`;
           </motion.div>
 
           {/* Student Story - Narrative Style */}
-          {results.matchedStories.length > 0 && (
+          {results.matchedStories && results.matchedStories.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -233,28 +233,28 @@ Check out our personalized results: ${shareData.link}`;
               
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed">
-                  When <span className="font-semibold text-[#004b34]">{results.matchedStories[0].firstName}</span> first 
-                  walked through our gates, they were {results.matchedStories[0].storyTldr.toLowerCase()}. 
+                  When <span className="font-semibold text-[#004b34]">{results.matchedStories[0]?.firstName || 'this student'}</span> first 
+                  walked through our gates, they were {results.matchedStories[0]?.storyTldr?.toLowerCase() || 'just beginning their journey'}. 
                 </p>
                 
                 <p className="text-gray-700 leading-relaxed mt-4">
-                  Today? {results.matchedStories[0].achievement}. But the real story isn't just about the 
-                  accomplishments — it's about the journey. {results.matchedStories[0].firstName} found mentors 
+                  Today? {results.matchedStories[0]?.achievement || 'They have achieved amazing things'}. But the real story isn't just about the 
+                  accomplishments — it's about the journey. {results.matchedStories[0]?.firstName || 'They'} found mentors 
                   who believed in them, small classes where their voice mattered, and opportunities to explore 
                   passions they didn't even know they had.
                 </p>
 
-                {results.matchedStories[0].parentQuote && (
+                {results.matchedStories[0]?.parentQuote && (
                   <blockquote className="border-l-4 border-[#d4a017] pl-6 my-6 italic text-gray-700">
-                    "{results.matchedStories[0].parentQuote}"
+                    "{results.matchedStories[0]?.parentQuote}"
                     <cite className="block text-sm mt-2 not-italic text-gray-600">
-                      — {results.matchedStories[0].firstName}'s Parent
+                      — {results.matchedStories[0]?.firstName || 'A'}'s Parent
                     </cite>
                   </blockquote>
                 )}
 
                 <p className="text-gray-700 leading-relaxed">
-                  Your child's story is waiting to be written. And just like {results.matchedStories[0].firstName}, 
+                  Your child's story is waiting to be written. And just like {results.matchedStories[0]?.firstName || 'these students'}, 
                   it starts with finding the right place to grow.
                 </p>
               </div>
@@ -262,7 +262,7 @@ Check out our personalized results: ${shareData.link}`;
           )}
 
           {/* Faculty Mentor */}
-          {results.matchedFaculty.length > 0 && (
+          {results.matchedFaculty && results.matchedFaculty.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -273,21 +273,21 @@ Check out our personalized results: ${shareData.link}`;
               
               <div className="flex items-start space-x-6">
                 <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0">
-                  {results.matchedFaculty[0].firstName[0]}{results.matchedFaculty[0].lastName[0]}
+                  {results.matchedFaculty[0]?.firstName?.[0] || ''}{results.matchedFaculty[0]?.lastName?.[0] || ''}
                 </div>
                 
                 <div className="flex-1">
                   <h3 className="text-xl font-semibold mb-1">
-                    {results.matchedFaculty[0].firstName} {results.matchedFaculty[0].lastName}
+                    {results.matchedFaculty[0]?.firstName || ''} {results.matchedFaculty[0]?.lastName || ''}
                   </h3>
-                  <p className="text-white/80 mb-3">{results.matchedFaculty[0].title}</p>
+                  <p className="text-white/80 mb-3">{results.matchedFaculty[0]?.title || ''}</p>
                   
                   <p className="text-white/90 leading-relaxed">
-                    {results.matchedFaculty[0].bio || `With years of experience and a passion for student development, 
-                    ${results.matchedFaculty[0].firstName} has guided countless students to discover their potential.`}
+                    {results.matchedFaculty[0]?.bio || `With years of experience and a passion for student development, 
+                    ${results.matchedFaculty[0]?.firstName || 'this educator'} has guided countless students to discover their potential.`}
                   </p>
                   
-                  {results.matchedFaculty[0].specialties && (
+                  {results.matchedFaculty[0].specialties && results.matchedFaculty[0].specialties.length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {results.matchedFaculty[0].specialties.map((specialty: string, idx: number) => (
                         <span key={idx} className="px-3 py-1 bg-white/20 rounded-full text-sm">

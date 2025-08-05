@@ -84,7 +84,7 @@ export default function QuizPage() {
     setIsSubmitting(true);
     try {
       // Save quiz data to sessionStorage for results page
-      sessionStorage.setItem('quizComplete', JSON.stringify(finalData));
+      sessionStorage.setItem('quizData', JSON.stringify(finalData));
       
       // Navigate to processing/results page
       router.push('/results');
