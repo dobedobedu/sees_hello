@@ -71,25 +71,38 @@ export default function ResultsPage() {
       link: window.location.href
     };
 
-    const shareText = `Our SSES Match: ${shareData.matchScore}%! 
-    
-Tour highlights we selected:
-${selectedTourItems.map(itemId => {
+    const selectedTourText = selectedTourItems.map(itemId => {
       const option = tourOptions?.find(opt => opt.id === itemId);
       return option ? `• ${option.title}` : '';
-    }).filter(Boolean).join('\n') || 'None selected yet'}
+    }).filter(Boolean).join('\n') || '• No tour items selected yet';
 
-Check out our personalized results: ${shareData.link}`;
+    const emailSubject = encodeURIComponent(`Our Saint Stephen's Match: ${shareData.matchScore}%!`);
+    
+    const emailBody = encodeURIComponent(`Hi Family,
 
-    try {
-      await navigator.clipboard.writeText(shareText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 3000);
-    } catch (err) {
-      console.error('Failed to copy:', err);
-    } finally {
-      setSharing(false);
-    }
+I just took the Saint Stephen's Episcopal School quiz and we got a ${shareData.matchScore}% match!
+
+Here's what stood out to me:
+
+${results?.matchedStories?.[0]?.firstName ? `Student Story: We learned about ${results.matchedStories[0].firstName}, who ${results.matchedStories[0].storyTldr}. Their achievement: ${results.matchedStories[0].achievement}` : 'Amazing student stories that match our interests'}
+
+${results?.matchedFaculty?.[0]?.firstName ? `Potential Mentor: ${results.matchedFaculty[0].firstName} ${results.matchedFaculty[0].lastName}, ${results.matchedFaculty[0].title}` : 'Great faculty mentors'}
+
+Tour highlights I selected:
+${selectedTourText}
+
+View our full personalized results here:
+${shareData.link}
+
+Let's discuss booking a tour!
+
+Best,
+[Your name]`);
+
+    // Open email client with pre-filled content
+    window.location.href = `mailto:?subject=${emailSubject}&body=${emailBody}`;
+    
+    setSharing(false);
   };
 
   const tourOptions = results ? [
@@ -207,17 +220,8 @@ Check out our personalized results: ${shareData.link}`;
               disabled={sharing}
               className="px-8 py-3 bg-white border-2 border-[#003825] text-[#003825] rounded-full font-medium hover:bg-gray-50 transition-all flex items-center"
             >
-              {copied ? (
-                <>
-                  <Check className="w-5 h-5 mr-2" />
-                  Copied to Clipboard!
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-5 h-5 mr-2" />
-                  Share with Family
-                </>
-              )}
+              <Mail className="w-5 h-5 mr-2" />
+              Email to Family
             </button>
           </motion.div>
 

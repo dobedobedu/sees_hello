@@ -73,7 +73,7 @@ export default function HomePage() {
               transition={{ delay: 0.3 }}
               className="col-span-12 sm:col-span-7 md:col-span-4 lg:col-span-4 row-span-1 md:row-span-2 border-b border-r border-dotted border-gray-300 p-8 flex flex-col items-center justify-center"
             >
-              <div className="text-8xl md:text-9xl font-schraft-medium text-[#003825] mb-2">470</div>
+              <div className="text-8xl md:text-9xl font-schraft-medium text-[#003825] mb-2">683</div>
               <p className="text-lg uppercase tracking-wider text-gray-600 font-schraft">Students</p>
               <p className="text-sm text-gray-400 mt-1">Pre-K through Grade 12</p>
             </motion.div>
