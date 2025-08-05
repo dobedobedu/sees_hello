@@ -10,6 +10,7 @@ import { QuizResponse, AnalysisResult } from '@/lib/ai/types';
 import storiesData from '@/knowledge/stories.json';
 import facultyData from '@/knowledge/faculty.json';
 import factsData from '@/knowledge/facts.json';
+import { Confetti } from '@/components/ui/confetti';
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -76,28 +77,18 @@ export default function ResultsPage() {
       return option ? `• ${option.title}` : '';
     }).filter(Boolean).join('\n') || '• No tour items selected yet';
 
-    const emailSubject = encodeURIComponent(`Our Saint Stephen's Match: ${shareData.matchScore}%!`);
+    const emailSubject = encodeURIComponent(`Saint Stephen's - ${shareData.matchScore}% match`);
     
-    const emailBody = encodeURIComponent(`Hi Family,
+    const emailBody = encodeURIComponent(`${shareData.matchScore}% match!
 
-I just took the Saint Stephen's Episcopal School quiz and we got a ${shareData.matchScore}% match!
+${results?.matchedStories?.[0]?.firstName ? `${results.matchedStories[0].firstName}: ${results.matchedStories[0].achievement}` : ''}
 
-Here's what stood out to me:
+${results?.matchedFaculty?.[0]?.firstName ? `Mentor: ${results.matchedFaculty[0].firstName} ${results.matchedFaculty[0].lastName} (${results.matchedFaculty[0].title})` : ''}
 
-${results?.matchedStories?.[0]?.firstName ? `Student Story: We learned about ${results.matchedStories[0].firstName}, who ${results.matchedStories[0].storyTldr}. Their achievement: ${results.matchedStories[0].achievement}` : 'Amazing student stories that match our interests'}
-
-${results?.matchedFaculty?.[0]?.firstName ? `Potential Mentor: ${results.matchedFaculty[0].firstName} ${results.matchedFaculty[0].lastName}, ${results.matchedFaculty[0].title}` : 'Great faculty mentors'}
-
-Tour highlights I selected:
+Want to see:
 ${selectedTourText}
 
-View our full personalized results here:
-${shareData.link}
-
-Let's discuss booking a tour!
-
-Best,
-[Your name]`);
+Full results: ${shareData.link}`);
 
     // Open email client with pre-filled content
     window.location.href = `mailto:?subject=${emailSubject}&body=${emailBody}`;
@@ -161,6 +152,9 @@ Best,
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Confetti Animation */}
+      <Confetti duration={1500} particleCount={50} />
+      
       {/* Header */}
       <header className="px-6 py-4 bg-[#004b34]">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
