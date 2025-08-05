@@ -6,17 +6,23 @@ import { QuizResponse, AnalysisResult, TranscriptionResult } from './types';
 export class AIService {
   private static instance: AIService;
   private provider: 'openai' | 'groq' | 'lmstudio' = 'lmstudio';
-  private lmstudioClient: LMStudioClient;
-  private openaiClient: OpenAIClient;
-  private groqClient: GroqClient;
 
   private constructor() {
-    this.lmstudioClient = new LMStudioClient();
-    this.openaiClient = new OpenAIClient();
-    this.groqClient = new GroqClient();
-    
     // Load settings from localStorage
     this.loadSettings();
+  }
+  
+  // Create clients on demand to ensure they have latest settings
+  private getLMStudioClient(): LMStudioClient {
+    return new LMStudioClient();
+  }
+  
+  private getOpenAIClient(): OpenAIClient {
+    return new OpenAIClient();
+  }
+  
+  private getGroqClient(): GroqClient {
+    return new GroqClient();
   }
 
   static getInstance(): AIService {
@@ -38,9 +44,10 @@ export class AIService {
 
   async analyze(quiz: QuizResponse, context: any): Promise<AnalysisResult> {
     // Always use LMStudio for analysis if available (it's local and free)
-    const lmstudioAvailable = await this.lmstudioClient.isAvailable();
+    const lmstudioClient = this.getLMStudioClient();
+    const lmstudioAvailable = await lmstudioClient.isAvailable();
     if (lmstudioAvailable) {
-      return this.lmstudioClient.analyze(quiz, context);
+      return lmstudioClient.analyze(quiz, context);
     }
 
     // Fallback to other providers
@@ -53,7 +60,7 @@ export class AIService {
         throw new Error('Groq analysis not implemented yet');
       default:
         // Return a basic fallback response
-        return this.lmstudioClient.analyze(quiz, context);
+        return lmstudioClient.analyze(quiz, context);
     }
   }
 
@@ -79,21 +86,23 @@ export class AIService {
     // Use API-based transcription
     switch (this.provider) {
       case 'openai':
-        const openaiAvailable = await this.openaiClient.isAvailable();
+        const openaiClient = this.getOpenAIClient();
+        const openaiAvailable = await openaiClient.isAvailable();
         if (openaiAvailable) {
-          return this.openaiClient.transcribe(audioBlob);
+          return openaiClient.transcribe(audioBlob);
         }
-        throw new Error('OpenAI not configured');
+        throw new Error('OpenAI not configured. Please add your API key in the admin panel.');
         
       case 'groq':
-        const groqAvailable = await this.groqClient.isAvailable();
+        const groqClient = this.getGroqClient();
+        const groqAvailable = await groqClient.isAvailable();
         if (groqAvailable) {
-          return this.groqClient.transcribe(audioBlob);
+          return groqClient.transcribe(audioBlob);
         }
-        throw new Error('Groq not configured');
+        throw new Error('Groq not configured. Please add your API key in the admin panel.');
         
       default:
-        throw new Error('No transcription service available for LMStudio');
+        throw new Error('LMStudio does not support audio transcription. Please use OpenAI or Groq.');
     }
   }
 

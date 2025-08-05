@@ -5,11 +5,27 @@ export class GroqClient {
   private client: Groq | null = null;
 
   constructor() {
+    // Try to get API key from localStorage first (admin panel settings)
+    if (typeof window !== 'undefined') {
+      const savedSettings = localStorage.getItem('aiSettings');
+      if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        if (settings.groqKey) {
+          this.client = new Groq({
+            apiKey: settings.groqKey,
+            dangerouslyAllowBrowser: true
+          });
+          return;
+        }
+      }
+    }
+    
+    // Fallback to environment variable
     const apiKey = process.env.NEXT_PUBLIC_GROQ_API_KEY;
     if (apiKey) {
       this.client = new Groq({
         apiKey,
-        dangerouslyAllowBrowser: true // Enable browser usage
+        dangerouslyAllowBrowser: true
       });
     }
   }
