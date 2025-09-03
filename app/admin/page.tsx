@@ -6,22 +6,18 @@ import { Settings, Mic, Brain, Database, Save, Check, AlertCircle } from 'lucide
 import Link from 'next/link';
 
 interface Settings {
-  aiProvider: 'openai' | 'groq' | 'lmstudio';
-  openaiKey: string;
-  groqKey: string;
-  lmstudioUrl: string;
+  aiProvider: 'openrouter';
+  openrouterKey: string;
   voiceEnabled: boolean;
-  voiceProvider: 'openai' | 'browser';
+  voiceProvider: 'browser';
 }
 
 export default function AdminPage() {
   const [settings, setSettings] = useState<Settings>({
-    aiProvider: 'lmstudio',
-    openaiKey: '',
-    groqKey: '',
-    lmstudioUrl: 'http://localhost:1234/v1',
-    voiceEnabled: true,
-    voiceProvider: 'openai'
+    aiProvider: 'openrouter',
+    openrouterKey: '',
+    voiceEnabled: false,
+    voiceProvider: 'browser'
   });
   const [saved, setSaved] = useState(false);
   const [testing, setTesting] = useState(false);
@@ -39,9 +35,7 @@ export default function AdminPage() {
       // Fall back to environment variables
       setSettings(prev => ({
         ...prev,
-        openaiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
-        groqKey: process.env.NEXT_PUBLIC_GROQ_API_KEY || '',
-        lmstudioUrl: process.env.NEXT_PUBLIC_LMSTUDIO_URL || 'http://localhost:1234/v1'
+        openrouterKey: process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || ''
       }));
     }
   }, []);
@@ -59,22 +53,21 @@ export default function AdminPage() {
     setTestResult(null);
 
     try {
-      if (settings.aiProvider === 'lmstudio') {
-        // Use our API route to avoid CORS issues
-        const response = await fetch(`/api/lmstudio?endpoint=models&baseUrl=${encodeURIComponent(settings.lmstudioUrl)}`);
-        const data = await response.json();
+      if (settings.openrouterKey) {
+        // Test OpenRouter connection by checking models endpoint
+        const response = await fetch('https://openrouter.ai/api/v1/models', {
+          headers: {
+            'Authorization': `Bearer ${settings.openrouterKey}`,
+          },
+        });
         
-        if (data.success) {
-          setTestResult({ success: true, message: 'LMStudio connected successfully!' });
+        if (response.ok) {
+          setTestResult({ success: true, message: 'OpenRouter connected successfully!' });
         } else {
-          setTestResult({ success: false, message: 'Failed to connect to LMStudio. Make sure LMStudio is running.' });
+          setTestResult({ success: false, message: 'Failed to connect to OpenRouter. Please check your API key.' });
         }
-      } else if (settings.aiProvider === 'openai' && settings.openaiKey) {
-        // Test OpenAI connection
-        setTestResult({ success: true, message: 'OpenAI API key format is valid' });
-      } else if (settings.aiProvider === 'groq' && settings.groqKey) {
-        // Test Groq connection
-        setTestResult({ success: true, message: 'Groq API key format is valid' });
+      } else {
+        setTestResult({ success: false, message: 'Please enter an OpenRouter API key first.' });
       }
     } catch (error) {
       setTestResult({ success: false, message: 'Connection failed: ' + error });
@@ -120,75 +113,30 @@ export default function AdminPage() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select AI Provider
+                  AI Provider
                 </label>
-                <div className="grid grid-cols-3 gap-3">
-                  {[
-                    { id: 'lmstudio', name: 'LMStudio', desc: 'Local LLM' },
-                    { id: 'openai', name: 'OpenAI', desc: 'GPT-4 & Whisper' },
-                    { id: 'groq', name: 'Groq', desc: 'Fast inference' }
-                  ].map((provider) => (
-                    <button
-                      key={provider.id}
-                      onClick={() => setSettings(prev => ({ ...prev, aiProvider: provider.id as any }))}
-                      className={`p-4 rounded-lg border-2 transition-all ${
-                        settings.aiProvider === provider.id
-                          ? 'border-[#d4a017] bg-[#fffef5]'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="font-medium">{provider.name}</div>
-                      <div className="text-xs text-gray-700 mt-1">{provider.desc}</div>
-                    </button>
-                  ))}
+                <div className="p-4 rounded-lg border-2 border-[#d4a017] bg-[#fffef5]">
+                  <div className="font-medium">OpenRouter</div>
+                  <div className="text-xs text-gray-700 mt-1">Access to multiple AI models through one API</div>
                 </div>
               </div>
 
-              {/* Provider-specific settings */}
-              {settings.aiProvider === 'openai' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    OpenAI API Key
-                  </label>
-                  <input
-                    type="password"
-                    value={settings.openaiKey}
-                    onChange={(e) => setSettings(prev => ({ ...prev, openaiKey: e.target.value }))}
-                    placeholder="sk-..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#d4a017] focus:border-[#d4a017]"
-                  />
-                </div>
-              )}
-
-              {settings.aiProvider === 'groq' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Groq API Key
-                  </label>
-                  <input
-                    type="password"
-                    value={settings.groqKey}
-                    onChange={(e) => setSettings(prev => ({ ...prev, groqKey: e.target.value }))}
-                    placeholder="gsk_..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#d4a017] focus:border-[#d4a017]"
-                  />
-                </div>
-              )}
-
-              {settings.aiProvider === 'lmstudio' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    LMStudio URL
-                  </label>
-                  <input
-                    type="text"
-                    value={settings.lmstudioUrl}
-                    onChange={(e) => setSettings(prev => ({ ...prev, lmstudioUrl: e.target.value }))}
-                    placeholder="http://localhost:1234/v1"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#d4a017] focus:border-[#d4a017]"
-                  />
-                </div>
-              )}
+              {/* OpenRouter API Key */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  OpenRouter API Key
+                </label>
+                <input
+                  type="password"
+                  value={settings.openrouterKey}
+                  onChange={(e) => setSettings(prev => ({ ...prev, openrouterKey: e.target.value }))}
+                  placeholder="sk-or-v1-..."
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#d4a017] focus:border-[#d4a017]"
+                />
+                <p className="text-xs text-gray-700 mt-1">
+                  Get your API key from <a href="https://openrouter.ai" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">openrouter.ai</a>
+                </p>
+              </div>
 
               <button
                 onClick={testConnection}
@@ -237,23 +185,10 @@ export default function AdminPage() {
                     onChange={(e) => setSettings(prev => ({ ...prev, voiceProvider: e.target.value as any }))}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#d4a017] focus:border-[#d4a017]"
                   >
-                    <option value="openai">
-                      {settings.aiProvider === 'groq' 
-                        ? 'Groq Whisper Large v3'
-                        : settings.aiProvider === 'openai'
-                        ? 'OpenAI Whisper'
-                        : 'API-based Whisper'}
-                    </option>
                     <option value="browser">Browser Speech API (Free but less accurate)</option>
                   </select>
                   <p className="text-xs text-gray-700 mt-1">
-                    {settings.voiceProvider === 'openai' 
-                      ? settings.aiProvider === 'groq' 
-                        ? 'Uses Groq Whisper Large v3. Free tier available!'
-                        : settings.aiProvider === 'openai'
-                        ? 'Uses OpenAI Whisper. Costs ~$0.006 per minute.'
-                        : 'LMStudio does not support audio transcription.'
-                      : 'Free but less accurate. Works offline.'}
+                    OpenRouter doesn't support audio transcription yet. Using browser's built-in speech recognition (free but less accurate).
                   </p>
                 </div>
               )}
