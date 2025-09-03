@@ -52,12 +52,9 @@ export default function TimelineQuestion({ data, onNext }: TimelineQuestionProps
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-6"
       >
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
           When are you looking to enroll?
         </h2>
-        <p className="text-gray-600 text-sm md:text-base">
-          This helps us provide timely information and availability
-        </p>
       </motion.div>
 
       <div className="grid md:grid-cols-2 gap-3">

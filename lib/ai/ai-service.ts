@@ -1,11 +1,12 @@
 import { LMStudioClient } from './lmstudio-client';
 import { OpenAIClient } from './openai-client';
 import { GroqClient } from './groq-client';
+import { OpenRouterClient } from './openrouter-client';
 import { QuizResponse, AnalysisResult, TranscriptionResult } from './types';
 
 export class AIService {
   private static instance: AIService;
-  private provider: 'openai' | 'groq' | 'lmstudio' = 'lmstudio';
+  private provider: 'openrouter' | 'openai' | 'groq' | 'lmstudio' = 'openrouter';
 
   private constructor() {
     // Load settings from localStorage
@@ -13,6 +14,10 @@ export class AIService {
   }
   
   // Create clients on demand to ensure they have latest settings
+  private getOpenRouterClient(): OpenRouterClient {
+    return new OpenRouterClient();
+  }
+  
   private getLMStudioClient(): LMStudioClient {
     return new LMStudioClient();
   }
@@ -37,31 +42,37 @@ export class AIService {
       const savedSettings = localStorage.getItem('aiSettings');
       if (savedSettings) {
         const settings = JSON.parse(savedSettings);
-        this.provider = settings.aiProvider || 'lmstudio';
+        this.provider = settings.aiProvider || 'openrouter';
       }
     }
   }
 
   async analyze(quiz: QuizResponse, context: any): Promise<AnalysisResult> {
-    // Always use LMStudio for analysis if available (it's local and free)
+    // Try OpenRouter first (primary provider for production)
+    const openrouterClient = this.getOpenRouterClient();
+    const openrouterAvailable = await openrouterClient.isAvailable();
+    if (openrouterAvailable) {
+      try {
+        return await openrouterClient.analyze(quiz, context);
+      } catch (error) {
+        console.warn('OpenRouter analysis failed, trying fallback:', error);
+      }
+    }
+
+    // Fallback to LMStudio if available (local development)
     const lmstudioClient = this.getLMStudioClient();
     const lmstudioAvailable = await lmstudioClient.isAvailable();
     if (lmstudioAvailable) {
-      return lmstudioClient.analyze(quiz, context);
+      try {
+        return await lmstudioClient.analyze(quiz, context);
+      } catch (error) {
+        console.warn('LMStudio analysis failed:', error);
+      }
     }
 
-    // Fallback to other providers
-    switch (this.provider) {
-      case 'openai':
-        // You could implement OpenAI-based analysis here
-        throw new Error('OpenAI analysis not implemented yet');
-      case 'groq':
-        // You could implement Groq-based analysis here
-        throw new Error('Groq analysis not implemented yet');
-      default:
-        // Return a basic fallback response
-        return lmstudioClient.analyze(quiz, context);
-    }
+    // Final fallback - use LMStudio's built-in fallback response
+    console.warn('No AI providers available, using built-in fallback response');
+    return lmstudioClient.analyze(quiz, context);
   }
 
   async transcribe(audioBlob: Blob): Promise<TranscriptionResult> {
@@ -85,6 +96,9 @@ export class AIService {
 
     // Use API-based transcription
     switch (this.provider) {
+      case 'openrouter':
+        // OpenRouter doesn't support audio transcription, use browser instead
+        return this.useBrowserSpeechRecognition(audioBlob);
       case 'openai':
         const openaiClient = this.getOpenAIClient();
         const openaiAvailable = await openaiClient.isAvailable();

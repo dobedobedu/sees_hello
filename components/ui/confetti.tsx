@@ -75,3 +75,17 @@ export function triggerConfetti() {
     startVelocity: 45,
   });
 }
+
+export function triggerMiniConfetti(x: number = 0.5, y: number = 0.5) {
+  confetti({
+    particleCount: 20,
+    spread: 40,
+    origin: { x, y },
+    colors: ['#d4a017', '#FFD700'],
+    ticks: 100,
+    gravity: 1.5,
+    decay: 0.92,
+    startVelocity: 20,
+    scalar: 0.8,
+  });
+}

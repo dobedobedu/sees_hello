@@ -11,9 +11,12 @@ interface ShimmerButtonProps {
 }
 
 export function ShimmerButton({ children, href, onClick, className = '' }: ShimmerButtonProps) {
+  const defaultPadding = className.includes('px-') || className.includes('py-') ? '' : 'px-10 py-4';
+  const defaultTextSize = className.includes('text-') ? '' : 'text-lg';
+  
   const baseClasses = `
     relative inline-flex items-center justify-center
-    px-10 py-4 font-medium text-lg text-white
+    ${defaultPadding} font-medium ${defaultTextSize} text-white
     bg-[#003825] rounded-full overflow-hidden
     transition-all duration-200 hover:bg-[#004b34] hover:scale-105
     before:absolute before:inset-0

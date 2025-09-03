@@ -1,0 +1,41 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "OPENROUTER_API_KEY": "@openrouter_api_key",
+    "OPENROUTER_BASE_URL": "https://openrouter.ai/api/v1", 
+    "OPENROUTER_MODEL": "anthropic/claude-3-haiku",
+    "NEXT_PUBLIC_SCHOOL_NAME": "Saint Stephen's Episcopal School",
+    "NEXT_PUBLIC_TOUR_EMAIL": "admissions@saintstephens.org",
+    "NEXT_PUBLIC_SITE_URL": "https://visit.saintstephens.org"
+  },
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
+}

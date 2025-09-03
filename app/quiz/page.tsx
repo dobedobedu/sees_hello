@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -20,6 +20,8 @@ export interface QuizData {
   familyValues?: string[];
   timeline?: string;
   childDescription?: string;
+  selectedCharacteristics?: string[];
+  additionalNotes?: string;
   voiceTranscript?: string;
 }
 
@@ -32,7 +34,7 @@ const QUIZ_STEPS = [
   { id: 6, title: 'Tell Us More', component: ChildDescriptionQuestion },
 ];
 
-export default function QuizPage() {
+function QuizPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const quizPath = searchParams.get('path');
@@ -144,19 +146,15 @@ export default function QuizPage() {
         </AnimatePresence>
       </main>
 
-      {/* Skip & See Matches Button */}
-      {currentStep < QUIZ_STEPS.length && Object.keys(quizData).length > 0 && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1 }}
-          onClick={() => handleSubmit(quizData)}
-          className="fixed bottom-6 right-6 px-4 py-2 bg-white border border-gray-300 text-gray-600 rounded-full shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all text-sm font-medium"
-        >
-          Skip & See Matches →
-        </motion.button>
-      )}
 
     </div>
+  );
+}
+
+export default function QuizPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <QuizPageContent />
+    </Suspense>
   );
 }

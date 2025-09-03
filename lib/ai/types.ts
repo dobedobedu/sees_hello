@@ -11,30 +11,43 @@ export interface AnalysisResult {
   matchedStories: StudentStory[];
   matchedFaculty: FacultyProfile[];
   keyInsights: string[];
-  provider: 'lmstudio' | 'openai' | 'claude';
+  recommendedPrograms?: string[];
+  provider?: 'lmstudio' | 'openai' | 'claude' | 'openrouter';
   processingTime?: number;
 }
 
 export interface StudentStory {
   id: string;
   firstName: string;
+  lastName?: string;
+  classYear?: string;
+  currentRole?: string;
   photoUrl?: string;
   interests: string[];
   storyTldr: string;
   achievement: string;
   parentQuote?: string;
-  studentQuote?: string;
+  quote?: string;
   gradeLevel?: string;
 }
 
 export interface FacultyProfile {
   id: string;
   firstName: string;
+  lastName?: string;
   title: string;
   photoUrl?: string;
+  videoUrl?: string;
+  videoUrl2?: string;
   specializesIn: string[];
   whyStudentsLoveThem: string;
   department?: string;
+  yearsAtSSES?: number;
+  education?: string;
+  awards?: string[];
+  notableAlumni?: string[];
+  achievements?: string[];
+  isAdministrator?: boolean;
 }
 
 export interface SchoolFact {
@@ -52,6 +65,8 @@ export interface QuizResponse {
   familyValues: string[];
   timeline: string;
   childDescription: string;
+  selectedCharacteristics?: string[];
+  additionalNotes?: string;
   voiceTranscript?: string;
 }
 

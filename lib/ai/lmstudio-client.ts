@@ -83,11 +83,15 @@ export class LMStudioClient {
       const data = result.data;
       const message = data.choices?.[0]?.message?.content || 'Unable to generate personalized message';
       
+      // Limit total cards to 3 max
+      const storyCount = Math.min(matchedStories.length, 2);
+      const facultyCount = Math.min(matchedFaculty.length, 3 - storyCount);
+      
       return {
         matchScore: this.calculateMatchScore(quiz, matchedStories, matchedFaculty),
         personalizedMessage: message,
-        matchedStories: matchedStories.slice(0, 2),
-        matchedFaculty: matchedFaculty.slice(0, 1),
+        matchedStories: matchedStories.slice(0, storyCount),
+        matchedFaculty: matchedFaculty.slice(0, facultyCount),
         keyInsights: this.extractKeyInsights(quiz),
         provider: 'lmstudio',
         processingTime: Date.now() - startTime
@@ -109,9 +113,17 @@ export class LMStudioClient {
     
     const topStories = scoredStories.slice(0, 3).map(item => item.story);
     
+    console.log('Quiz interests:', quiz.interests);
+    console.log('All story scores:', scoredStories.map(s => ({
+      id: s.story.id,
+      firstName: s.story.firstName,
+      interests: s.story.interests,
+      score: s.score
+    })));
     console.log('Top matched stories:', topStories.map(s => ({
       id: s.id,
       firstName: s.firstName,
+      interests: s.interests,
       score: scoredStories.find(sc => sc.story.id === s.id)?.score
     })));
     
@@ -121,11 +133,22 @@ export class LMStudioClient {
   private calculateStoryScore(quiz: QuizResponse, story: StudentStory): number {
     let score = 0;
     
-    // Interest overlap
+    // Interest overlap - check both ways for better matching
     const commonInterests = story.interests.filter(i => 
-      quiz.interests.some(qi => qi.toLowerCase().includes(i.toLowerCase()))
+      quiz.interests.some(qi => {
+        const storyInterest = i.toLowerCase();
+        const quizInterest = qi.toLowerCase();
+        // Check if interests match or are related
+        return storyInterest.includes(quizInterest) || 
+               quizInterest.includes(storyInterest) ||
+               // Add some common mappings
+               (quizInterest === 'stem' && (storyInterest.includes('science') || storyInterest.includes('tech') || storyInterest.includes('engineering'))) ||
+               (quizInterest === 'technology' && (storyInterest.includes('tech') || storyInterest.includes('coding') || storyInterest.includes('innovation'))) ||
+               (quizInterest === 'business' && storyInterest.includes('entrepreneurship')) ||
+               (quizInterest === 'athletics' && storyInterest.includes('sport'))
+      })
     );
-    score += commonInterests.length * 20;
+    score += commonInterests.length * 25;
     
     // Grade level match - map quiz levels to story levels
     if (story.gradeLevel) {
@@ -156,13 +179,51 @@ export class LMStudioClient {
   }
 
   private findMatchingFaculty(quiz: QuizResponse, faculty: FacultyProfile[]): FacultyProfile[] {
-    return faculty
+    // Filter out administrators and prioritize teachers with videos
+    const teachers = faculty.filter(f => !f.isAdministrator);
+    const teachersWithVideos = teachers.filter(f => f.videoUrl);
+    const teachersWithoutVideos = teachers.filter(f => !f.videoUrl);
+    
+    // Score and sort teachers with videos
+    const scoredWithVideos = teachersWithVideos
+      .map(f => ({
+        faculty: f,
+        score: this.calculateFacultyScore(quiz, f) + 50 // Bonus for having video
+      }))
+      .sort((a, b) => b.score - a.score);
+    
+    // Score and sort teachers without videos
+    const scoredWithoutVideos = teachersWithoutVideos
       .map(f => ({
         faculty: f,
         score: this.calculateFacultyScore(quiz, f)
       }))
-      .sort((a, b) => b.score - a.score)
-      .map(item => item.faculty);
+      .sort((a, b) => b.score - a.score);
+    
+    // Combine results, ensuring at least one with video is included
+    const results = [];
+    
+    // Always include at least one teacher with video if available
+    if (scoredWithVideos.length > 0) {
+      results.push(scoredWithVideos[0].faculty);
+    }
+    
+    // Add more matches, alternating between video/no-video if possible
+    let videoIndex = 1;
+    let noVideoIndex = 0;
+    
+    while (results.length < 3 && (videoIndex < scoredWithVideos.length || noVideoIndex < scoredWithoutVideos.length)) {
+      if (videoIndex < scoredWithVideos.length) {
+        results.push(scoredWithVideos[videoIndex].faculty);
+        videoIndex++;
+      }
+      if (results.length < 3 && noVideoIndex < scoredWithoutVideos.length) {
+        results.push(scoredWithoutVideos[noVideoIndex].faculty);
+        noVideoIndex++;
+      }
+    }
+    
+    return results;
   }
 
   private calculateFacultyScore(quiz: QuizResponse, faculty: FacultyProfile): number {
@@ -248,7 +309,7 @@ Keep it conversational, warm, and specific. Avoid generic education jargon.`;
     faculty: FacultyProfile[]
   ): AnalysisResult {
     const fallbackMessage = `
-Thank you for sharing about your ${quiz.gradeLevel === 'lower' ? 'Lower School' : quiz.gradeLevel === 'intermediate' ? 'Intermediate School' : quiz.gradeLevel === 'middle' ? 'Middle School' : 'High School'} student! 
+Thank you for sharing about your ${quiz.gradeLevel === 'prek-k' ? 'Pre-K/Kindergarten' : quiz.gradeLevel === 'elementary' ? 'Elementary School' : quiz.gradeLevel === 'middle' ? 'Middle School' : 'High School'} student! 
 Based on what you've told us about their interests in ${quiz.interests.slice(0, 2).join(' and ')}, 
 we believe Saint Stephen's could be an excellent fit.
 
@@ -260,13 +321,17 @@ We're excited to meet you and learn more about your family's educational journey
 Schedule your personalized tour to see our approach in action!
     `.trim();
 
+    // Limit total cards to 3 max
+    const storyCount = Math.min(stories.length, 2);
+    const facultyCount = Math.min(faculty.length, 3 - storyCount);
+    
     return {
       matchScore: 85,
       personalizedMessage: fallbackMessage,
-      matchedStories: stories.slice(0, 2),
-      matchedFaculty: faculty.slice(0, 1),
+      matchedStories: stories.slice(0, storyCount),
+      matchedFaculty: faculty.slice(0, facultyCount),
       keyInsights: this.extractKeyInsights(quiz),
-      provider: 'lmstudio-fallback',  // Mark as fallback for debugging
+      provider: 'lmstudio',  // Fallback response from LMStudio client
       processingTime: 0
     };
   }

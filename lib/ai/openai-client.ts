@@ -90,14 +90,15 @@ export class OpenAIClient {
               {
                 type: 'text',
                 text: 'Please transcribe this audio recording of a parent describing their child for a school application. Focus on capturing the key details about the child\'s personality, interests, and needs.'
-              },
-              {
-                type: 'input_audio',
-                input_audio: {
-                  data: base64Audio,
-                  format: 'webm'
-                }
               }
+              // TODO: Update to new OpenAI audio API format
+              // {
+              //   type: 'input_audio',
+              //   input_audio: {
+              //     data: base64Audio,
+              //     format: 'webm'
+              //   }
+              // }
             ]
           }
         ],

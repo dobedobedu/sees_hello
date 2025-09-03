@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Award, Globe, Heart, Shield, Sparkles } from 'lucide-react';
+import { Users, Award, Globe, Heart, Shield, Sparkles, Trophy } from 'lucide-react';
 
 interface FamilyValuesQuestionProps {
   data: any;
@@ -11,19 +11,6 @@ interface FamilyValuesQuestionProps {
 }
 
 const VALUES = [
-  {
-    id: 'small_classes',
-    title: 'Small Class Sizes',
-    description: 'Personalized attention and support',
-    icon: Users,
-    metric: '8:1',
-    metricLabel: 'Student-Teacher Ratio',
-    details: [
-      'Average class size of 15 students',
-      'Individual attention for every learner',
-      'Strong teacher-student relationships'
-    ]
-  },
   {
     id: 'academic_excellence',
     title: 'Academic Excellence',
@@ -38,8 +25,23 @@ const VALUES = [
     ]
   },
   {
+    id: 'athletics',
+    title: 'Athletics',
+    description: 'Championship sports programs',
+    icon: Trophy,
+    metric: '20+',
+    metricLabel: 'Sports Teams',
+    details: [
+      '15 State Championships in the last 5 years',
+      '30+ Division I college athletes',
+      'Multiple All-American athletes',
+      'State-of-the-art athletic facilities',
+      'Professional coaching staff'
+    ]
+  },
+  {
     id: 'global_perspective',
-    title: 'Global Perspective',
+    title: 'Global Perspectives',
     description: 'International awareness and cultural fluency',
     icon: Globe,
     metric: '15+',
@@ -65,21 +67,8 @@ const VALUES = [
     ]
   },
   {
-    id: 'safe_environment',
-    title: 'Safe & Nurturing Environment',
-    description: 'Inclusive and supportive community',
-    icon: Shield,
-    metric: '100%',
-    metricLabel: 'Anti-Bullying Commitment',
-    details: [
-      'Comprehensive wellness programs',
-      'Full-time counselors and support staff',
-      'Inclusive community culture'
-    ]
-  },
-  {
     id: 'innovation',
-    title: 'Innovation & Creativity',
+    title: 'Innovation and Creativity',
     description: 'Cutting-edge programs and approaches',
     icon: Sparkles,
     metric: 'STEAM',
@@ -89,6 +78,19 @@ const VALUES = [
       'Robotics and coding programs',
       'Maker spaces and 3D printing',
       'Arts integration across curriculum'
+    ]
+  },
+  {
+    id: 'safe_environment',
+    title: 'Safe and Nurturing Environment',
+    description: 'Inclusive and supportive community',
+    icon: Shield,
+    metric: '100%',
+    metricLabel: 'Anti-Bullying Commitment',
+    details: [
+      'Comprehensive wellness programs',
+      'Full-time counselors and support staff',
+      'Inclusive community culture'
     ]
   },
 ];
@@ -130,12 +132,9 @@ export default function FamilyValuesQuestion({ data, onNext, onBack }: FamilyVal
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
           What matters most to your family?
         </h2>
-        <p className="text-gray-600">
-          Choose up to 3 values that guide your educational priorities
-        </p>
       </motion.div>
 
       <div className="space-y-3 mb-8">

@@ -1,0 +1,305 @@
+
+> had-me-at-hello@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.4.5 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.105.132:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 939ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1850ms
+ GET / 200 in 2058ms
+ ✓ Compiled /quiz in 455ms
+ GET /quiz 200 in 483ms
+ HEAD / 200 in 46ms
+ ✓ Compiled /results in 321ms
+ GET /results 200 in 346ms
+ ✓ Compiled /api/lmstudio in 86ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 146ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 146ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 7650ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 14736ms
+ GET / 200 in 52ms
+ GET / 200 in 89ms
+ ✓ Compiled /_not-found/page in 322ms
+ GET /apple-touch-icon-120x120-precomposed.png 404 in 368ms
+ GET /apple-touch-icon-120x120.png 404 in 52ms
+ GET /apple-touch-icon-precomposed.png 404 in 55ms
+ GET /apple-touch-icon.png 404 in 53ms
+ ✓ Compiled /favicon.ico in 98ms
+ GET /favicon.ico 200 in 363ms
+ GET /quiz 200 in 97ms
+ GET /results 200 in 55ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 36ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 38ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 7067ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 12563ms
+ GET /quiz 200 in 141ms
+ GET /quiz 200 in 68ms
+ GET /quiz 200 in 67ms
+ GET /quiz 200 in 70ms
+ GET /quiz 200 in 67ms
+ GET /quiz 200 in 74ms
+ GET / 200 in 67ms
+ GET /quiz 200 in 44ms
+ GET /results 200 in 46ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 58ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 57ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 7339ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 12110ms
+ GET / 200 in 57ms
+ GET /quiz 200 in 49ms
+ GET /results 200 in 51ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 34ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 34ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 6410ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 12445ms
+ GET / 200 in 270ms
+ GET /quiz 200 in 70ms
+ GET /results 200 in 57ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 46ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 49ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 10219ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 16521ms
+ GET / 200 in 43ms
+ GET /quiz 200 in 61ms
+ GET /results 200 in 64ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 26ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 28ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 7022ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 13282ms
+ GET / 200 in 418ms
+ GET /apple-touch-icon-precomposed.png 404 in 64ms
+ GET /apple-touch-icon.png 404 in 75ms
+ GET /favicon.ico 200 in 243ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 245ms
+ GET /quiz 200 in 76ms
+ GET /quiz 200 in 64ms
+ GET /quiz 200 in 63ms
+ GET /results 200 in 48ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 118ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 128ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 28879ms
+LMStudio API error: Error [TimeoutError]: The operation was aborted due to timeout
+    at async POST (app/api/lmstudio/route.ts:41:21)
+  39 |     const body = await request.json();
+  40 |     
+> 41 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  42 |       method: 'POST',
+  43 |       headers: {
+  44 |         'Content-Type': 'application/json', {
+  code: 23,
+  INDEX_SIZE_ERR: 1,
+  DOMSTRING_SIZE_ERR: 2,
+  HIERARCHY_REQUEST_ERR: 3,
+  WRONG_DOCUMENT_ERR: 4,
+  INVALID_CHARACTER_ERR: 5,
+  NO_DATA_ALLOWED_ERR: 6,
+  NO_MODIFICATION_ALLOWED_ERR: 7,
+  NOT_FOUND_ERR: 8,
+  NOT_SUPPORTED_ERR: 9,
+  INUSE_ATTRIBUTE_ERR: 10,
+  INVALID_STATE_ERR: 11,
+  SYNTAX_ERR: 12,
+  INVALID_MODIFICATION_ERR: 13,
+  NAMESPACE_ERR: 14,
+  INVALID_ACCESS_ERR: 15,
+  VALIDATION_ERR: 16,
+  TYPE_MISMATCH_ERR: 17,
+  SECURITY_ERR: 18,
+  NETWORK_ERR: 19,
+  ABORT_ERR: 20,
+  URL_MISMATCH_ERR: 21,
+  QUOTA_EXCEEDED_ERR: 22,
+  TIMEOUT_ERR: 23,
+  INVALID_NODE_TYPE_ERR: 24,
+  DATA_CLONE_ERR: 25
+}
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 30160ms
+ GET /quiz 200 in 72ms
+ GET /apple-touch-icon-precomposed.png 404 in 32ms
+ GET /apple-touch-icon.png 404 in 35ms
+ GET / 200 in 41ms
+ GET /apple-touch-icon-precomposed.png 404 in 60ms
+ GET /apple-touch-icon.png 404 in 74ms
+ GET /favicon.ico 200 in 247ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 251ms
+ GET / 200 in 66ms
+ GET /quiz 200 in 48ms
+ GET / 200 in 52ms
+ GET /quiz 200 in 67ms
+ GET /results 200 in 50ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 37ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 40ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 9788ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 18853ms
+ GET / 200 in 88ms
+ GET /quiz 200 in 78ms
+ GET /results 200 in 47ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 36ms
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 36ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 10118ms
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 200 in 19405ms
+ GET / 200 in 104ms
+ GET /apple-touch-icon.png 404 in 40ms
+ GET /apple-touch-icon-precomposed.png 404 in 62ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 223ms
+ GET /favicon.ico 200 in 227ms
+ GET / 200 in 97ms
+ GET / 200 in 168ms
+ GET /quiz 200 in 58ms
+ GET /results 200 in 59ms
+LMStudio API error: TypeError: fetch failed
+    at async GET (app/api/lmstudio/route.ts:9:21)
+   7 |
+   8 |   try {
+>  9 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  10 |       signal: AbortSignal.timeout(5000) // 5 second timeout
+  11 |     });
+  12 |      {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 116ms
+LMStudio API error: TypeError: fetch failed
+    at async GET (app/api/lmstudio/route.ts:9:21)
+   7 |
+   8 |   try {
+>  9 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  10 |       signal: AbortSignal.timeout(5000) // 5 second timeout
+  11 |     });
+  12 |      {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 169ms
+LMStudio API error: TypeError: fetch failed
+    at async POST (app/api/lmstudio/route.ts:41:21)
+  39 |     const body = await request.json();
+  40 |     
+> 41 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  42 |       method: 'POST',
+  43 |       headers: {
+  44 |         'Content-Type': 'application/json', {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 49ms
+LMStudio API error: TypeError: fetch failed
+    at async POST (app/api/lmstudio/route.ts:41:21)
+  39 |     const body = await request.json();
+  40 |     
+> 41 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  42 |       method: 'POST',
+  43 |       headers: {
+  44 |         'Content-Type': 'application/json', {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 90ms
+ GET / 200 in 44ms
+ GET /results 200 in 270ms
+ GET /quiz 200 in 59ms
+ GET /quiz 200 in 67ms
+ GET / 200 in 56ms
+ GET / 200 in 51ms
+ GET / 200 in 69ms
+ GET / 200 in 56ms
+ GET / 200 in 59ms
+ GET /quiz 200 in 45ms
+ GET / 200 in 38ms
+ GET /quiz 200 in 51ms
+ GET /results 200 in 46ms
+LMStudio API error: TypeError: fetch failed
+    at async GET (app/api/lmstudio/route.ts:9:21)
+   7 |
+   8 |   try {
+>  9 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  10 |       signal: AbortSignal.timeout(5000) // 5 second timeout
+  11 |     });
+  12 |      {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 78ms
+LMStudio API error: TypeError: fetch failed
+    at async GET (app/api/lmstudio/route.ts:9:21)
+   7 |
+   8 |   try {
+>  9 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  10 |       signal: AbortSignal.timeout(5000) // 5 second timeout
+  11 |     });
+  12 |      {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 131ms
+LMStudio API error: TypeError: fetch failed
+    at async POST (app/api/lmstudio/route.ts:41:21)
+  39 |     const body = await request.json();
+  40 |     
+> 41 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  42 |       method: 'POST',
+  43 |       headers: {
+  44 |         'Content-Type': 'application/json', {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 49ms
+LMStudio API error: TypeError: fetch failed
+    at async POST (app/api/lmstudio/route.ts:41:21)
+  39 |     const body = await request.json();
+  40 |     
+> 41 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  42 |       method: 'POST',
+  43 |       headers: {
+  44 |         'Content-Type': 'application/json', {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+ POST /api/lmstudio?endpoint=chat/completions&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 85ms
+ GET / 200 in 43ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 823ms
+ GET /admin 200 in 847ms
+ GET / 200 in 66ms
+ GET / 200 in 87ms
+ GET /quiz 200 in 59ms
+ GET /results 200 in 47ms
+LMStudio API error: TypeError: fetch failed
+    at async GET (app/api/lmstudio/route.ts:9:21)
+   7 |
+   8 |   try {
+>  9 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  10 |       signal: AbortSignal.timeout(5000) // 5 second timeout
+  11 |     });
+  12 |      {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 76ms
+LMStudio API error: TypeError: fetch failed
+    at async GET (app/api/lmstudio/route.ts:9:21)
+   7 |
+   8 |   try {
+>  9 |     const response = await fetch(`${baseUrl}/${endpoint}`, {
+     |                     ^
+  10 |       signal: AbortSignal.timeout(5000) // 5 second timeout
+  11 |     });
+  12 |      {
+  [cause]: [AggregateError: ] { code: 'ECONNREFUSED' }
+}
+ GET /api/lmstudio?endpoint=models&baseUrl=http%3A%2F%2Flocalhost%3A1234%2Fv1 500 in 123ms
+ GET / 200 in 235ms
+ GET /apple-touch-icon-precomposed.png 404 in 83ms
+ GET /apple-touch-icon-precomposed.png 404 in 103ms
+ GET /apple-touch-icon.png 404 in 98ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 252ms
+ GET /favicon.ico 200 in 235ms
+ GET /apple-touch-icon.png 404 in 42ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 245ms
+[?25h
