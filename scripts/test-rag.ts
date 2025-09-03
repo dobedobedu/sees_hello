@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { LMStudioClient } from '../lib/ai/lmstudio-client';
+import { OpenRouterClient } from '../lib/ai/openrouter-client';
 import { QuizResponse } from '../lib/ai/types';
 import alumniData from '../knowledge/alumni-stories.json';
 import facultyData from '../knowledge/faculty.json';
@@ -57,16 +57,16 @@ const testCases: { name: string; quiz: QuizResponse }[] = [
 async function runTests() {
   console.log('🧪 Testing RAG System Accuracy\n');
   
-  const client = new LMStudioClient();
+  const client = new OpenRouterClient();
   const context = {
     stories: alumniData.stories as any[],
     faculty: facultyData.faculty as any[],
     facts: factsData.facts as any[]
   };
 
-  // Check if LMStudio is available
+  // Check if OpenRouter is available
   const isAvailable = await client.isAvailable();
-  console.log(`📡 LMStudio Available: ${isAvailable ? '✅ Yes' : '❌ No'}\n`);
+  console.log(`📡 OpenRouter Available: ${isAvailable ? '✅ Yes' : '❌ No'}\n`);
 
   for (const testCase of testCases) {
     console.log(`\n📋 Test Case: ${testCase.name}`);

@@ -1,11 +1,11 @@
-import { LMStudioClient } from '@/lib/ai/lmstudio-client';
+import { OpenRouterClient } from '@/lib/ai/openrouter-client';
 import { QuizResponse, RAGContext } from '@/lib/ai/types';
 import storiesData from '@/knowledge/stories.json';
 import facultyData from '@/knowledge/faculty.json';
 import factsData from '@/knowledge/facts.json';
 
 describe('RAG Accuracy Tests', () => {
-  const client = new LMStudioClient();
+  const client = new OpenRouterClient();
   const context: RAGContext = {
     stories: storiesData.stories as any[],
     faculty: facultyData.faculty as any[],
@@ -254,7 +254,7 @@ describe('RAG Accuracy Tests', () => {
 // Integration test to verify full RAG pipeline
 describe('Full RAG Pipeline Integration', () => {
   test('should complete full analysis pipeline', async () => {
-    const client = new LMStudioClient();
+    const client = new OpenRouterClient();
     const quiz: QuizResponse = {
       gradeLevel: 'high',
       currentSituation: 'seeking_change',
