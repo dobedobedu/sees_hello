@@ -6,7 +6,24 @@ export class OpenRouterClient {
   private model: string;
 
   constructor() {
-    this.apiKey = process.env.OPENROUTER_API_KEY || null;
+    // Try to get API key from localStorage first (for client-side)
+    if (typeof window !== 'undefined') {
+      const savedSettings = localStorage.getItem('aiSettings');
+      if (savedSettings) {
+        try {
+          const settings = JSON.parse(savedSettings);
+          this.apiKey = settings.openrouterKey || process.env.OPENROUTER_API_KEY || null;
+        } catch {
+          this.apiKey = process.env.OPENROUTER_API_KEY || null;
+        }
+      } else {
+        this.apiKey = process.env.OPENROUTER_API_KEY || null;
+      }
+    } else {
+      // Server-side: use environment variable
+      this.apiKey = process.env.OPENROUTER_API_KEY || null;
+    }
+    
     this.baseURL = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
     this.model = process.env.OPENROUTER_MODEL || 'openai/gpt-4o-mini';
     
@@ -15,7 +32,8 @@ export class OpenRouterClient {
       hasApiKey: !!this.apiKey,
       baseURL: this.baseURL,
       model: this.model,
-      apiKeyPrefix: this.apiKey ? this.apiKey.substring(0, 10) + '...' : 'not set'
+      apiKeyPrefix: this.apiKey ? this.apiKey.substring(0, 10) + '...' : 'not set',
+      source: typeof window !== 'undefined' ? 'client' : 'server'
     });
   }
 
@@ -40,13 +58,23 @@ export class OpenRouterClient {
   }
 
   async analyze(quiz: QuizResponse, context: any): Promise<AnalysisResult> {
+    console.log('🔍 OpenRouter analyze called with quiz:', quiz);
+    
     if (!this.apiKey) {
+      console.error('❌ OpenRouter API key not configured');
       throw new Error('OpenRouter API key not configured');
     }
 
     const prompt = this.buildAnalysisPrompt(quiz, context);
+    console.log('📝 Prompt built, length:', prompt.length);
 
     try {
+      console.log('🚀 Sending request to OpenRouter:', {
+        url: `${this.baseURL}/chat/completions`,
+        model: this.model,
+        hasApiKey: !!this.apiKey
+      });
+      
       const response = await fetch(`${this.baseURL}/chat/completions`, {
         method: 'POST',
         headers: {
@@ -72,11 +100,17 @@ export class OpenRouterClient {
         }),
       });
 
+      console.log('📡 OpenRouter response status:', response.status);
+
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ OpenRouter API error:', response.status, errorText);
         throw new Error(`OpenRouter API error: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
+      console.log('✅ OpenRouter response received, has content:', !!data.choices?.[0]?.message?.content);
+      
       const content = data.choices?.[0]?.message?.content;
 
       if (!content) {
@@ -85,7 +119,7 @@ export class OpenRouterClient {
 
       return this.parseAnalysisResponse(content, context);
     } catch (error) {
-      console.error('OpenRouter analysis error:', error);
+      console.error('❌ OpenRouter analysis error:', error);
       
       // Return fallback response
       return this.getFallbackAnalysis(quiz, context);
