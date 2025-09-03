@@ -1,33 +1,12 @@
-import { LMStudioClient } from './lmstudio-client';
-import { OpenAIClient } from './openai-client';
-import { GroqClient } from './groq-client';
 import { OpenRouterClient } from './openrouter-client';
 import { QuizResponse, AnalysisResult, TranscriptionResult } from './types';
 
 export class AIService {
   private static instance: AIService;
-  private provider: 'openrouter' | 'openai' | 'groq' | 'lmstudio' = 'openrouter';
+  private openRouterClient: OpenRouterClient;
 
   private constructor() {
-    // Load settings from localStorage
-    this.loadSettings();
-  }
-  
-  // Create clients on demand to ensure they have latest settings
-  private getOpenRouterClient(): OpenRouterClient {
-    return new OpenRouterClient();
-  }
-  
-  private getLMStudioClient(): LMStudioClient {
-    return new LMStudioClient();
-  }
-  
-  private getOpenAIClient(): OpenAIClient {
-    return new OpenAIClient();
-  }
-  
-  private getGroqClient(): GroqClient {
-    return new GroqClient();
+    this.openRouterClient = new OpenRouterClient();
   }
 
   static getInstance(): AIService {
@@ -37,100 +16,65 @@ export class AIService {
     return AIService.instance;
   }
 
-  private loadSettings() {
-    if (typeof window !== 'undefined') {
-      const savedSettings = localStorage.getItem('aiSettings');
-      if (savedSettings) {
-        const settings = JSON.parse(savedSettings);
-        this.provider = settings.aiProvider || 'openrouter';
-      }
+  async analyze(quiz: QuizResponse, context: any): Promise<AnalysisResult> {
+    try {
+      // Use OpenRouter for analysis
+      return await this.openRouterClient.analyze(quiz, context);
+    } catch (error) {
+      console.error('OpenRouter analysis failed:', error);
+      
+      // Return a built-in fallback response
+      return this.getFallbackResponse(quiz, context);
     }
   }
 
-  async analyze(quiz: QuizResponse, context: any): Promise<AnalysisResult> {
-    // Try OpenRouter first (primary provider for production)
-    const openrouterClient = this.getOpenRouterClient();
-    const openrouterAvailable = await openrouterClient.isAvailable();
-    if (openrouterAvailable) {
-      try {
-        return await openrouterClient.analyze(quiz, context);
-      } catch (error) {
-        console.warn('OpenRouter analysis failed, trying fallback:', error);
-      }
-    }
+  private getFallbackResponse(quiz: QuizResponse, context: any): AnalysisResult {
+    // Simple fallback matching logic
+    const matchedStories = context.stories?.slice(0, 2) || [];
+    const matchedFaculty = context.faculty?.slice(0, 1) || [];
+    
+    const fallbackMessage = `Thank you for sharing about your ${quiz.gradeLevel} student! Based on their interests in ${quiz.interests.slice(0, 2).join(' and ')}, we believe Saint Stephen's could be an excellent fit.
 
-    // Fallback to LMStudio if available (local development)
-    const lmstudioClient = this.getLMStudioClient();
-    const lmstudioAvailable = await lmstudioClient.isAvailable();
-    if (lmstudioAvailable) {
-      try {
-        return await lmstudioClient.analyze(quiz, context);
-      } catch (error) {
-        console.warn('LMStudio analysis failed:', error);
-      }
-    }
+Our personalized approach to education, combined with our strong programs in these areas, helps students like yours discover their unique potential. We'd love to show you how our community can support your child's growth and development.
 
-    // Final fallback - use LMStudio's built-in fallback response
-    console.warn('No AI providers available, using built-in fallback response');
-    return lmstudioClient.analyze(quiz, context);
+We're excited to meet you and learn more about your family's educational journey. Schedule your personalized tour to see our approach in action!`;
+
+    return {
+      matchScore: 88,
+      personalizedMessage: fallbackMessage,
+      matchedStories,
+      matchedFaculty,
+      keyInsights: this.extractKeyInsights(quiz),
+      provider: 'openrouter',
+      processingTime: 0
+    };
+  }
+
+  private extractKeyInsights(quiz: QuizResponse): string[] {
+    const insights = [];
+    
+    if (quiz.interests.length > 0) {
+      insights.push(`Strong interest in ${quiz.interests[0]}`);
+    }
+    
+    if (quiz.familyValues.includes('small_classes')) {
+      insights.push('Values personalized attention');
+    }
+    
+    if (quiz.timeline === 'this_year') {
+      insights.push('Ready to start soon');
+    }
+    
+    return insights;
   }
 
   async transcribe(audioBlob: Blob): Promise<TranscriptionResult> {
-    // Load current settings
-    this.loadSettings();
-    
-    const savedSettings = localStorage.getItem('aiSettings');
-    const settings = savedSettings ? JSON.parse(savedSettings) : {};
-    
-    // Check voice settings
-    if (!settings.voiceEnabled) {
-      throw new Error('Voice input is disabled');
-    }
-
-    if (settings.voiceProvider === 'browser') {
-      // Use browser's built-in speech recognition
-      return this.useBrowserSpeechRecognition(audioBlob);
-    }
-    
-    // For API-based transcription, check which provider is configured
-
-    // Use API-based transcription
-    switch (this.provider) {
-      case 'openrouter':
-        // OpenRouter doesn't support audio transcription, use browser instead
-        return this.useBrowserSpeechRecognition(audioBlob);
-      case 'openai':
-        const openaiClient = this.getOpenAIClient();
-        const openaiAvailable = await openaiClient.isAvailable();
-        if (openaiAvailable) {
-          return openaiClient.transcribe(audioBlob);
-        }
-        throw new Error('OpenAI not configured. Please add your API key in the admin panel.');
-        
-      case 'groq':
-        const groqClient = this.getGroqClient();
-        const groqAvailable = await groqClient.isAvailable();
-        if (groqAvailable) {
-          return groqClient.transcribe(audioBlob);
-        }
-        throw new Error('Groq not configured. Please add your API key in the admin panel.');
-        
-      default:
-        throw new Error('LMStudio does not support audio transcription. Please use OpenAI or Groq.');
-    }
-  }
-
-  private async useBrowserSpeechRecognition(audioBlob: Blob): Promise<TranscriptionResult> {
-    // This is a placeholder - browser speech recognition doesn't work with audio blobs
-    // In practice, you'd need to use the Web Speech API directly during recording
-    throw new Error('Browser speech recognition must be used during recording, not after');
+    // OpenRouter doesn't support audio transcription
+    // Use browser's Web Speech API instead
+    throw new Error('Audio transcription not supported. Please use the browser voice input during recording.');
   }
 
   getCurrentProvider(): string {
-    return this.provider;
-  }
-
-  setProvider(provider: 'openai' | 'groq' | 'lmstudio') {
-    this.provider = provider;
+    return 'openrouter';
   }
 }

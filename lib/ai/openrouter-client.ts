@@ -8,7 +8,15 @@ export class OpenRouterClient {
   constructor() {
     this.apiKey = process.env.OPENROUTER_API_KEY || null;
     this.baseURL = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
-    this.model = process.env.OPENROUTER_MODEL || 'anthropic/claude-3-haiku';
+    this.model = process.env.OPENROUTER_MODEL || 'openai/gpt-4o-mini';
+    
+    // Debug logging for production
+    console.log('OpenRouter Client initialized:', {
+      hasApiKey: !!this.apiKey,
+      baseURL: this.baseURL,
+      model: this.model,
+      apiKeyPrefix: this.apiKey ? this.apiKey.substring(0, 10) + '...' : 'not set'
+    });
   }
 
   async isAvailable(): Promise<boolean> {
