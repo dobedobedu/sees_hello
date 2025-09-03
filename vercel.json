@@ -9,13 +9,6 @@
     "NEXT_PUBLIC_TOUR_EMAIL": "admissions@saintstephens.org",
     "NEXT_PUBLIC_SITE_URL": "https://visit.saintstephens.org"
   },
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/",
-      "permanent": false
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
