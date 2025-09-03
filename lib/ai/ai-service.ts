@@ -6,7 +6,7 @@ import { QuizResponse, AnalysisResult, TranscriptionResult } from './types';
 
 export class AIService {
   private static instance: AIService;
-  private provider: 'openrouter' | 'openai' | 'groq' | 'lmstudio' = 'lmstudio';
+  private provider: 'openrouter' | 'openai' | 'groq' | 'lmstudio' = 'openrouter';
 
   private constructor() {
     // Load settings from localStorage
@@ -42,7 +42,7 @@ export class AIService {
       const savedSettings = localStorage.getItem('aiSettings');
       if (savedSettings) {
         const settings = JSON.parse(savedSettings);
-        this.provider = settings.aiProvider || 'lmstudio';
+        this.provider = settings.aiProvider || 'openrouter';
       }
     }
   }

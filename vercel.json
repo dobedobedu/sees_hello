@@ -5,6 +5,9 @@
   "framework": "nextjs",
   "regions": ["iad1"],
   "env": {
+    "OPENROUTER_API_KEY": "@openrouter_api_key",
+    "OPENROUTER_BASE_URL": "@openrouter_base_url",
+    "OPENROUTER_MODEL": "@openrouter_model",
     "NEXT_PUBLIC_SCHOOL_NAME": "Saint Stephen's Episcopal School",
     "NEXT_PUBLIC_TOUR_EMAIL": "admissions@saintstephens.org",
     "NEXT_PUBLIC_SITE_URL": "https://visit.saintstephens.org"
