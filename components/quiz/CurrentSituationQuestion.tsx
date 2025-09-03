@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Search, Calendar, Compass } from 'lucide-react';
+import { MapPin, Search, Calendar, Compass, School, Users, TrendingUp, Home } from 'lucide-react';
 
 interface CurrentSituationQuestionProps {
   data: any;
@@ -14,67 +15,101 @@ const SITUATIONS = [
     id: 'new_to_area',
     title: 'New to the Area',
     icon: MapPin,
-    description: 'We recently moved and need a school',
+    color: 'bg-blue-100 text-blue-600',
   },
   {
     id: 'seeking_change',
-    title: 'Seeking Better Fit',
+    title: 'Time for Change',
     icon: Search,
-    description: 'Looking for a different educational approach',
+    color: 'bg-purple-100 text-purple-600',
   },
   {
-    id: 'planning_ahead',
-    title: 'Planning Ahead',
-    icon: Calendar,
-    description: 'Preparing for upcoming school years',
+    id: 'first_time',
+    title: 'First School',
+    icon: School,
+    color: 'bg-green-100 text-green-600',
   },
   {
-    id: 'exploring_options',
-    title: 'Exploring Options',
-    icon: Compass,
-    description: 'Researching schools in the area',
+    id: 'growing_needs',
+    title: 'Growing Needs',
+    icon: TrendingUp,
+    color: 'bg-orange-100 text-orange-600',
   },
 ];
 
 export default function CurrentSituationQuestion({ data, onNext }: CurrentSituationQuestionProps) {
+  const [selected, setSelected] = useState(data.currentSituation || '');
+
   const handleSelect = (situation: string) => {
-    onNext({ currentSituation: situation });
+    setSelected(situation);
+    // Auto-advance after selection
+    setTimeout(() => {
+      onNext({ currentSituation: situation });
+    }, 300);
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-2xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
           What brings you here today?
         </h2>
-        <p className="text-gray-600">
-          Understanding your situation helps us provide relevant information
-        </p>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {SITUATIONS.map((situation, index) => {
           const Icon = situation.icon;
+          const isSelected = selected === situation.id;
+          
           return (
             <motion.button
               key={situation.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => handleSelect(situation.id)}
-              className={`p-6 rounded-xl bg-white hover:bg-gray-50 transition-all border-2 text-left ${
-                data.currentSituation === situation.id ? 'border-[#d4a017] bg-[#fffef5]' : 'border-gray-200'
+              className={`relative p-8 rounded-2xl transition-all ${
+                isSelected 
+                  ? 'bg-[#004b34] text-white shadow-lg' 
+                  : 'bg-white border-2 border-gray-200 hover:border-[#004b34]/20'
               }`}
             >
-              <Icon className="w-8 h-8 text-[#004b34] mb-3" />
-              <h3 className="font-semibold text-lg text-gray-900 mb-1">{situation.title}</h3>
-              <p className="text-gray-600 text-sm">{situation.description}</p>
+              <motion.div 
+                initial={false}
+                animate={{ scale: isSelected ? 1.1 : 1 }}
+                transition={{ duration: 0.2 }}
+                className="flex flex-col items-center space-y-3"
+              >
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${
+                  isSelected ? 'bg-white/20' : situation.color
+                }`}>
+                  <Icon className={`w-8 h-8 ${isSelected ? 'text-white' : ''}`} />
+                </div>
+                <h3 className={`font-semibold text-base ${
+                  isSelected ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {situation.title}
+                </h3>
+              </motion.div>
+              
+              {isSelected && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 200 }}
+                  className="absolute top-2 right-2 w-6 h-6 bg-[#d4a017] rounded-full flex items-center justify-center"
+                >
+                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </motion.div>
+              )}
             </motion.button>
           );
         })}

@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import GradeLevelQuestion from '@/components/quiz/GradeLevelQuestion';
 import CurrentSituationQuestion from '@/components/quiz/CurrentSituationQuestion';
 import InterestsQuestion from '@/components/quiz/InterestsQuestion';
@@ -20,20 +20,24 @@ export interface QuizData {
   familyValues?: string[];
   timeline?: string;
   childDescription?: string;
+  selectedCharacteristics?: string[];
+  additionalNotes?: string;
   voiceTranscript?: string;
 }
 
 const QUIZ_STEPS = [
   { id: 1, title: 'Grade Level', component: GradeLevelQuestion },
-  { id: 2, title: 'Current Situation', component: CurrentSituationQuestion },
-  { id: 3, title: 'Interests', component: InterestsQuestion },
-  { id: 4, title: 'Family Values', component: FamilyValuesQuestion },
-  { id: 5, title: 'Timeline', component: TimelineQuestion },
+  { id: 2, title: 'Interests', component: InterestsQuestion },
+  { id: 3, title: 'Current Situation', component: CurrentSituationQuestion },
+  { id: 4, title: 'Timeline', component: TimelineQuestion },
+  { id: 5, title: 'Family Values', component: FamilyValuesQuestion },
   { id: 6, title: 'Tell Us More', component: ChildDescriptionQuestion },
 ];
 
-export default function QuizPage() {
+function QuizPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const quizPath = searchParams.get('path');
   const [currentStep, setCurrentStep] = useState(1);
   const [quizData, setQuizData] = useState<QuizData>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -82,7 +86,7 @@ export default function QuizPage() {
     setIsSubmitting(true);
     try {
       // Save quiz data to sessionStorage for results page
-      sessionStorage.setItem('quizComplete', JSON.stringify(finalData));
+      sessionStorage.setItem('quizData', JSON.stringify(finalData));
       
       // Navigate to processing/results page
       router.push('/results');
@@ -122,7 +126,7 @@ export default function QuizPage() {
       />
 
       {/* Quiz Content */}
-      <main className="max-w-4xl mx-auto px-6 py-8">
+      <main className="max-w-4xl mx-auto px-6 py-4 md:py-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
@@ -142,6 +146,15 @@ export default function QuizPage() {
         </AnimatePresence>
       </main>
 
+
     </div>
+  );
+}
+
+export default function QuizPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <QuizPageContent />
+    </Suspense>
   );
 }

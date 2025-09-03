@@ -49,7 +49,7 @@ const INTERESTS_BY_GRADE: Record<string, Array<{id: string, label: string, icon:
   'high': [
     { id: 'stem', label: 'STEM Research', icon: Beaker },
     { id: 'arts', label: 'Arts & Design', icon: Palette },
-    { id: 'athletics', label: 'Varsity Sports', icon: Trophy },
+    { id: 'athletics', label: 'Athletics', icon: Trophy },
     { id: 'technology', label: 'Computer Science', icon: Code },
     { id: 'music', label: 'Music & Composition', icon: Music },
     { id: 'languages', label: 'Global Studies', icon: Globe },
@@ -99,7 +99,7 @@ export default function InterestsQuestion({ data, onNext, onBack }: InterestsQue
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto pb-20">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -149,20 +149,25 @@ export default function InterestsQuestion({ data, onNext, onBack }: InterestsQue
         })}
       </div>
 
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        onClick={handleContinue}
-        disabled={selected.length === 0}
-        className={`w-full py-4 rounded-md font-semibold text-lg transition-all ${
-          selected.length > 0
-            ? 'bg-[#003825] text-white hover:bg-[#004b34]'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-        }`}
-      >
-        Continue
-      </motion.button>
+      {/* Sticky Continue Button */}
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-50 border-t border-gray-200 p-4 z-50">
+        <div className="max-w-4xl mx-auto">
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            onClick={handleContinue}
+            disabled={selected.length === 0}
+            className={`w-full py-4 rounded-md font-semibold text-lg transition-all ${
+              selected.length > 0
+                ? 'bg-[#003825] text-white hover:bg-[#004b34]'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            Continue ({selected.length} selected)
+          </motion.button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Award, Globe, Heart, Shield, Sparkles } from 'lucide-react';
+import { Users, Award, Globe, Heart, Shield, Sparkles, Trophy } from 'lucide-react';
 
 interface FamilyValuesQuestionProps {
   data: any;
@@ -11,19 +11,6 @@ interface FamilyValuesQuestionProps {
 }
 
 const VALUES = [
-  {
-    id: 'small_classes',
-    title: 'Small Class Sizes',
-    description: 'Personalized attention and support',
-    icon: Users,
-    metric: '8:1',
-    metricLabel: 'Student-Teacher Ratio',
-    details: [
-      'Average class size of 15 students',
-      'Individual attention for every learner',
-      'Strong teacher-student relationships'
-    ]
-  },
   {
     id: 'academic_excellence',
     title: 'Academic Excellence',
@@ -38,8 +25,23 @@ const VALUES = [
     ]
   },
   {
+    id: 'athletics',
+    title: 'Athletics',
+    description: 'Championship sports programs',
+    icon: Trophy,
+    metric: '20+',
+    metricLabel: 'Sports Teams',
+    details: [
+      '15 State Championships in the last 5 years',
+      '30+ Division I college athletes',
+      'Multiple All-American athletes',
+      'State-of-the-art athletic facilities',
+      'Professional coaching staff'
+    ]
+  },
+  {
     id: 'global_perspective',
-    title: 'Global Perspective',
+    title: 'Global Perspectives',
     description: 'International awareness and cultural fluency',
     icon: Globe,
     metric: '15+',
@@ -65,21 +67,8 @@ const VALUES = [
     ]
   },
   {
-    id: 'safe_environment',
-    title: 'Safe & Nurturing Environment',
-    description: 'Inclusive and supportive community',
-    icon: Shield,
-    metric: '100%',
-    metricLabel: 'Anti-Bullying Commitment',
-    details: [
-      'Comprehensive wellness programs',
-      'Full-time counselors and support staff',
-      'Inclusive community culture'
-    ]
-  },
-  {
     id: 'innovation',
-    title: 'Innovation & Creativity',
+    title: 'Innovation and Creativity',
     description: 'Cutting-edge programs and approaches',
     icon: Sparkles,
     metric: 'STEAM',
@@ -89,6 +78,19 @@ const VALUES = [
       'Robotics and coding programs',
       'Maker spaces and 3D printing',
       'Arts integration across curriculum'
+    ]
+  },
+  {
+    id: 'safe_environment',
+    title: 'Safe and Nurturing Environment',
+    description: 'Inclusive and supportive community',
+    icon: Shield,
+    metric: '100%',
+    metricLabel: 'Anti-Bullying Commitment',
+    details: [
+      'Comprehensive wellness programs',
+      'Full-time counselors and support staff',
+      'Inclusive community culture'
     ]
   },
 ];
@@ -124,18 +126,15 @@ export default function FamilyValuesQuestion({ data, onNext, onBack }: FamilyVal
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto pb-20">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
           What matters most to your family?
         </h2>
-        <p className="text-gray-600">
-          Choose up to 3 values that guide your educational priorities
-        </p>
       </motion.div>
 
       <div className="space-y-3 mb-8">
@@ -152,10 +151,13 @@ export default function FamilyValuesQuestion({ data, onNext, onBack }: FamilyVal
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <button
-                onClick={() => toggleValue(value.id)}
-                disabled={!isSelected && selected.length >= 3}
-                className={`w-full p-4 rounded-xl flex items-center text-left transition-all ${
+              <div
+                onClick={() => {
+                  if (!(!isSelected && selected.length >= 3)) {
+                    toggleValue(value.id);
+                  }
+                }}
+                className={`w-full p-4 rounded-xl flex items-center text-left transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-[#fffef5] border-2 border-[#d4a017]'
                     : selected.length >= 3
@@ -218,7 +220,7 @@ export default function FamilyValuesQuestion({ data, onNext, onBack }: FamilyVal
                     </div>
                   </div>
                 )}
-              </button>
+              </div>
               
               {isSelected && isExpanded && value.details && (
                 <motion.div
@@ -242,20 +244,25 @@ export default function FamilyValuesQuestion({ data, onNext, onBack }: FamilyVal
         })}
       </div>
 
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
-        onClick={handleContinue}
-        disabled={selected.length === 0}
-        className={`w-full py-4 rounded-md font-semibold text-lg transition-all ${
-          selected.length > 0
-            ? 'bg-[#003825] text-white hover:bg-[#004b34]'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-        }`}
-      >
-        Continue
-      </motion.button>
+      {/* Sticky Continue Button */}
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-50 border-t border-gray-200 p-4">
+        <div className="max-w-3xl mx-auto">
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            onClick={handleContinue}
+            disabled={selected.length === 0}
+            className={`w-full py-4 rounded-md font-semibold text-lg transition-all ${
+              selected.length > 0
+                ? 'bg-[#003825] text-white hover:bg-[#004b34]'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            Continue ({selected.length}/3 selected)
+          </motion.button>
+        </div>
+      </div>
     </div>
   );
 }

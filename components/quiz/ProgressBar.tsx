@@ -13,7 +13,7 @@ export default function ProgressBar({ currentStep, totalSteps, onStepClick, onBa
 
   return (
     <div className="w-full bg-white border-b border-gray-200">
-      <div className="max-w-4xl mx-auto px-6 py-4 pb-8">
+      <div className="max-w-4xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between mb-2">
           {onBack && (
             <button
@@ -40,11 +40,11 @@ export default function ProgressBar({ currentStep, totalSteps, onStepClick, onBa
               <button
                 onClick={() => onStepClick && index < currentStep && onStepClick(index + 1)}
                 disabled={!onStepClick || index >= currentStep}
-                className={`relative flex items-center justify-center w-10 h-10 rounded-full text-sm font-semibold transition-all ${
+                className={`relative flex items-center justify-center w-10 h-10 rounded-full text-sm font-semibold transition-all overflow-hidden ${
                   index < currentStep - 1
                     ? 'bg-[#003825] text-white cursor-pointer hover:bg-[#004b34]'
                     : index === currentStep - 1
-                    ? 'bg-[#d4a017] text-white ring-4 ring-[#d4a017]/20 cursor-default'
+                    ? 'bg-[#d4a017] text-white shadow-lg shadow-[#d4a017]/30 cursor-default'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 } ${
                   index < currentStep - 1 ? 'hover:scale-110' : ''
@@ -52,11 +52,6 @@ export default function ProgressBar({ currentStep, totalSteps, onStepClick, onBa
               >
                 {index + 1}
               </button>
-              {stepLabels && stepLabels[index] && currentStep === index + 1 && (
-                <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-[#004b34] whitespace-nowrap">
-                  {stepLabels[index]}
-                </div>
-              )}
               {index < totalSteps - 1 && (
                 <div className="flex-1 h-1 mx-2">
                   <div className="h-full bg-gray-200 rounded-full overflow-hidden">

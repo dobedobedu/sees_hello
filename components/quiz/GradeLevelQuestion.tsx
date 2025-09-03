@@ -52,12 +52,9 @@ export default function GradeLevelQuestion({ data, onNext }: GradeLevelQuestionP
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
           What grade level is your child entering?
         </h2>
-        <p className="text-gray-600">
-          We tailor our programs for each developmental stage
-        </p>
       </motion.div>
 
       <div className="space-y-3">

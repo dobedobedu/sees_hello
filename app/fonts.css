@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'Schraft';
+  src: url('/fonts/SchraftMediumExpanded-pg59K.ttf') format('truetype');
+  font-weight: 500;
+  font-stretch: expanded;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Schraft';
+  src: url('/fonts/SchraftExpanded-4n6gx.ttf') format('truetype');
+  font-weight: 400;
+  font-stretch: expanded;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Custom utility class for Schraft Medium Expanded (for numbers) */
+.font-schraft-medium {
+  font-family: 'Schraft', sans-serif;
+  font-weight: 500;
+  font-stretch: expanded;
+}
+
+/* Custom utility class for Schraft Expanded (for descriptive text) */
+.font-schraft {
+  font-family: 'Schraft', sans-serif;
+  font-weight: 400;
+  font-stretch: expanded;
+}
