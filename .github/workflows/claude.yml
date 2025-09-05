@@ -1,0 +1,184 @@
+name: Claude AI Assistant
+
+on:
+  issues:
+    types: [opened, edited]
+  issue_comment:
+    types: [created, edited]
+  pull_request:
+    types: [opened, synchronize]
+  pull_request_review_comment:
+    types: [created, edited]
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Message for Claude'
+        required: true
+        type: string
+
+jobs:
+  claude-ai:
+    runs-on: ubuntu-latest
+    if: |
+      (contains(github.event.comment.body, '@claude') || 
+       contains(github.event.issue.body, '@claude') ||
+       contains(github.event.pull_request.body, '@claude') ||
+       github.event_name == 'workflow_dispatch')
+    
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Node.js (for web projects)
+        if: contains(github.repository, 'had_me_at_hello')
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies (web projects)
+        if: contains(github.repository, 'had_me_at_hello')
+        run: npm ci
+      
+      - name: Setup Swift (for iOS projects)
+        if: contains(github.repository, 'taptap') || contains(github.repository, 'TapTap')
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: '5.9'
+      
+      - name: Process with Claude
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Install Claude CLI
+          npm install -g @anthropic/claude-cli
+          
+          # Extract the message/command
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            MESSAGE="${{ github.event.inputs.message }}"
+          elif [ "${{ github.event_name }}" == "issue_comment" ] || [ "${{ github.event_name }}" == "pull_request_review_comment" ]; then
+            MESSAGE="${{ github.event.comment.body }}"
+          elif [ "${{ github.event_name }}" == "issues" ]; then
+            MESSAGE="${{ github.event.issue.body }}"
+          else
+            MESSAGE="${{ github.event.pull_request.body }}"
+          fi
+          
+          # Remove @claude mention to get actual command
+          COMMAND=$(echo "$MESSAGE" | sed 's/@claude//g' | xargs)
+          
+          # Determine context
+          ISSUE_NUMBER="${{ github.event.issue.number || github.event.pull_request.number }}"
+          
+          # Check for special commands
+          if echo "$COMMAND" | grep -q "^/review"; then
+            # Perform code review
+            echo "🔍 Performing code review..."
+            
+            # Get PR diff
+            gh pr diff $ISSUE_NUMBER > pr_diff.txt
+            
+            # Generate review with Claude
+            REVIEW=$(claude --no-stream "Review this pull request diff. Focus on: code quality, potential bugs, performance, and best practices. Be constructive and specific with suggestions." < pr_diff.txt)
+            
+            # Post review
+            gh pr review $ISSUE_NUMBER --comment --body "$REVIEW"
+          
+          elif echo "$COMMAND" | grep -q "^/fix"; then
+            # Fix issues
+            DESCRIPTION=$(echo "$COMMAND" | sed 's/^\/fix//g' | xargs)
+            echo "🔧 Creating fix for: $DESCRIPTION"
+            
+            # Create branch
+            BRANCH="claude-fix-$ISSUE_NUMBER"
+            git checkout -b $BRANCH
+            
+            # Get issue context
+            ISSUE_BODY=$(gh issue view $ISSUE_NUMBER --json body -q .body)
+            
+            # Generate fix with Claude
+            claude --no-stream "Fix the following issue in this codebase: $DESCRIPTION. Issue context: $ISSUE_BODY. Make the necessary code changes."
+            
+            # Commit and push
+            git add -A
+            git commit -m "fix: $DESCRIPTION (closes #$ISSUE_NUMBER)"
+            git push origin $BRANCH
+            
+            # Create PR
+            gh pr create \
+              --title "Fix: $DESCRIPTION" \
+              --body "🤖 **Automated fix by Claude**\n\nCloses #$ISSUE_NUMBER\n\n## Changes\n$DESCRIPTION\n\n## Testing\nPlease review and test these changes before merging." \
+              --base main \
+              --head $BRANCH
+          
+          elif echo "$COMMAND" | grep -q "^/implement"; then
+            # Implement feature
+            FEATURE=$(echo "$COMMAND" | sed 's/^\/implement//g' | xargs)
+            echo "✨ Implementing: $FEATURE"
+            
+            # Create branch
+            BRANCH="claude-feature-$(echo $FEATURE | tr ' ' '-' | tr '[:upper:]' '[:lower:]' | cut -c1-30)"
+            git checkout -b $BRANCH
+            
+            # Get context from CLAUDE.md if exists
+            if [ -f "CLAUDE.md" ]; then
+              CONTEXT=$(cat CLAUDE.md)
+            else
+              CONTEXT="Standard best practices"
+            fi
+            
+            # Generate implementation
+            claude --no-stream "Implement the following feature: $FEATURE. Follow these guidelines: $CONTEXT"
+            
+            # Commit and push
+            git add -A
+            git commit -m "feat: $FEATURE"
+            git push origin $BRANCH
+            
+            # Create PR
+            gh pr create \
+              --title "Feature: $FEATURE" \
+              --body "✨ **New feature by Claude**\n\n## Description\n$FEATURE\n\n## Implementation Notes\nPlease review the implementation and test thoroughly before merging." \
+              --base main \
+              --head $BRANCH
+          
+          elif echo "$COMMAND" | grep -q "^/test"; then
+            # Run tests and report
+            echo "🧪 Running tests..."
+            
+            if [ -f "package.json" ]; then
+              npm test 2>&1 | tee test_results.txt
+            elif [ -f "Package.swift" ]; then
+              swift test 2>&1 | tee test_results.txt
+            fi
+            
+            # Post results
+            TEST_RESULTS=$(cat test_results.txt)
+            gh issue comment $ISSUE_NUMBER --body "## 🧪 Test Results\n\n\`\`\`\n$TEST_RESULTS\n\`\`\`"
+          
+          else
+            # General response
+            RESPONSE=$(claude --no-stream "$COMMAND")
+            
+            # Post response as comment
+            if [ -n "$ISSUE_NUMBER" ]; then
+              gh issue comment $ISSUE_NUMBER --body "🤖 **Claude's Response**\n\n$RESPONSE"
+            fi
+          fi
+      
+      - name: Error handling
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER="${{ github.event.issue.number || github.event.pull_request.number }}"
+          if [ -n "$ISSUE_NUMBER" ]; then
+            gh issue comment $ISSUE_NUMBER --body "❌ Claude encountered an error. Please check the [workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})."
+          fi
