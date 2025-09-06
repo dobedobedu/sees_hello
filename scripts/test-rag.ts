@@ -2,8 +2,8 @@
 
 import { OpenRouterClient } from '../lib/ai/openrouter-client';
 import { QuizResponse } from '../lib/ai/types';
-import alumniData from '../knowledge/alumni-stories.json';
-import facultyData from '../knowledge/faculty.json';
+import alumniData from '../knowledge/alumni-story.json';
+import facultyData from '../knowledge/faculty-story.json';
 import factsData from '../knowledge/facts.json';
 
 // Test scenarios

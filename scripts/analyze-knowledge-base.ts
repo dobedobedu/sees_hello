@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import storiesData from '../knowledge/stories.json';
-import facultyData from '../knowledge/faculty.json';
+import storiesData from '../knowledge/current-student-stories.json';
+import facultyData from '../knowledge/faculty-story.json';
 import factsData from '../knowledge/facts.json';
 
 console.log('📚 Knowledge Base Analysis\n');

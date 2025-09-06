@@ -1,7 +1,7 @@
 import { OpenRouterClient } from '@/lib/ai/openrouter-client';
 import { QuizResponse, RAGContext } from '@/lib/ai/types';
-import storiesData from '@/knowledge/stories.json';
-import facultyData from '@/knowledge/faculty.json';
+import storiesData from '@/knowledge/current-student-stories.json';
+import facultyData from '@/knowledge/faculty-story.json';
 import factsData from '@/knowledge/facts.json';
 
 describe('RAG Accuracy Tests', () => {

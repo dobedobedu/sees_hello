@@ -1,0 +1,25 @@
+.bubble {
+  display: inline-block;
+  margin: 5px;
+  padding: 15px;
+  border-radius: 30px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bubble.selected {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.bubble-label {
+  font-weight: bold;
+}
+
+.bubble-description {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.85em;
+  color: #666;
+}
